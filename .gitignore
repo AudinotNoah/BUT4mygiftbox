@@ -1,0 +1,31 @@
+# === PHP / Composer ===
+vendor/
+composer.lock
+
+# === Environnement ===
+.env
+.env.local
+.env.*.local
+*.ini
+
+# === IDE ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Logs & Cache ===
+*.log
+*.cache
+.cache/
+logs/
+tmp/
+temp/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Docker (si tu en utilises) ===
+docker-compose.override.yml
+*.pid

@@ -19,9 +19,8 @@ composer.lock
 *.log
 # Ignorer tout dans cache/
 
-cache/
-
-!src\views\cache\.gitkeep
+src/views/cache/**
+!src/views/cache/.gitkeep
 
 logs/
 tmp/

@@ -1,0 +1,14 @@
+<h1>Prestations pour la Catégorie : {{ categorie.libelle }}</h1>
+{% if categorie.prestations is empty %}
+    <p>Aucune prestation trouvée pour cette catégorie.</p>
+{% else %}
+    <ul>
+        {% for prestation in categorie.prestations %}
+            <li>
+                {{ prestation.libelle }} (ID: {{ prestation.id }}, Tarif: {{ prestation.tarif }})
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<p><a href="/categories">Retour aux catégories</a></p>
+<p><a href="/categorie/{{ categorie.id }}">Retour à la catégorie {{ categorie.libelle }}</a></p>

@@ -6,6 +6,8 @@ declare(strict_types=1);
 use Slim\Factory\AppFactory;
 use gift\appli\utils\Eloquent; 
 use Slim\App;
+use Slim\Views\Twig;           
+use Slim\Views\TwigMiddleware;
 
 try {
    
@@ -17,6 +19,9 @@ try {
 
 $app = AppFactory::create();
 
+
+$twig = Twig::create(__DIR__ . '/../views', ['cache' => __DIR__ . '/../views/cache', 'auto_reload' => true]);
+$app->add(TwigMiddleware::create($app, $twig));
 
 $app->addRoutingMiddleware();
 

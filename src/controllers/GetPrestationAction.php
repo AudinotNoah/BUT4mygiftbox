@@ -10,6 +10,8 @@ use gift\appli\models\Prestation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Views\Twig;
+
 
 class GetPrestationAction extends AbstractAction
 {
@@ -23,16 +25,10 @@ class GetPrestationAction extends AbstractAction
         }
         try {
             $prestation = Prestation::findOrFail($prestationId);
-
-            $html = "<h1>Prestation (BDD): " . htmlspecialchars($prestation->libelle) . "</h1>";
-            $html .= "<p><strong>ID :</strong> " . htmlspecialchars($prestation->id) . "</p>";
-            $html .= "<p><strong>Description :</strong> " . htmlspecialchars($prestation->description) . "</p>";
-            $html .= "<p><strong>Tarif :</strong> " . htmlspecialchars((string)$prestation->tarif) . " (" . htmlspecialchars($prestation->unite ?? '') . ")</p>";
-            $html .= "<p><a href=\"/categories\">Retour à l'accueil</a></p>";
-
-            $response->getBody()->write($html);
-            return $response;
-
+            $view = Twig::fromRequest($request);
+            return $view->render($response, 'prestation.html.twig', [
+                'prestation' => $prestation
+            ]);
         } catch (ModelNotFoundException $e) {
             throw new HttpNotFoundException($request, "Prestation non trouvée pour l'ID: " . htmlspecialchars($prestationId), $e);
         }

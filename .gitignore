@@ -18,10 +18,10 @@ composer.lock
 # === Logs & Cache ===
 *.log
 # Ignorer tout dans cache/
-cache/**
 
-# Réinclure uniquement le fichier .gitkeep
-!cache/.gitkeep
+cache/
+
+!src\views\cache\.gitkeep
 
 logs/
 tmp/

@@ -1,0 +1,14 @@
+<h1>Liste des Catégories</h1>
+{% if categories is empty %}
+    <p>Aucune catégorie n'est actuellement disponible.</p>
+{% else %}
+    <ul>
+        {% for categorie in categories %}
+            <li>
+                <a href="/categorie/{{ categorie.id }}">
+                    {{ categorie.id }} - {{ categorie.libelle }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -2,6 +2,7 @@
 vendor/
 composer.lock
 
+
 # === Environnement ===
 .env
 .env.local
@@ -16,8 +17,12 @@ composer.lock
 
 # === Logs & Cache ===
 *.log
-*.cache
-.cache/
+# Ignorer tout dans cache/
+cache/**
+
+# Réinclure uniquement le fichier .gitkeep
+!cache/.gitkeep
+
 logs/
 tmp/
 temp/

@@ -1,15 +1,20 @@
-<h1>Prestations pour la Catégorie : {{ categorie.libelle }}</h1>
-{% if categorie.prestations is empty %}
-    <p>Aucune prestation trouvée pour cette catégorie.</p>
-{% else %}
-    <ul>
-        {% for prestation in categorie.prestations %}
-            <li>
-                {{ prestation.libelle }} (ID: {{ prestation.id }})
-                <a href="{{ url_for('details_prestation', {}, {'id': prestation.id}) }}">Voir détails</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
-<p><a href="{{ url_for('details_categorie', {'id': categorie.id}) }}">Retour à la catégorie "{{ categorie.libelle }}"</a></p>
-<p><a href="{{ url_for('liste_categories') }}">Retour à la liste de toutes les catégories</a></p>
+{% extends "layout.html.twig" %}
+
+{% block title %}Prestations pour {{ categorie.libelle }}{% endblock %}
+
+{% block content %}
+    <h2>Prestations pour : {{ categorie.libelle }}</h2>
+    {% if categorie.prestations is empty %}
+        <p>Aucune prestation.</p>
+    {% else %}
+        <ul>
+            {% for prestation in categorie.prestations %}
+                <li>
+                    {{ prestation.libelle }}
+                    <a href="{{ url_for('details_prestation', {}, {'id': prestation.id}) }}">(détails)</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <p><a href="{{ url_for('details_categorie', {'id': categorie.id}) }}">Retour à la catégorie</a></p>
+{% endblock %}

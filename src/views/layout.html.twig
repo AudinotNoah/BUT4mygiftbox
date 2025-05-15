@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MyGiftBox{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>MyGiftBox.net</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('liste_categories') }}">Catégories</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <main>
+        {% block content %}
+            <p>Contenu par défaut si le bloc n'est pas surchargé.</p>
+        {% endblock %}
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>© 2025 MyGiftBox.net</p>
+    </footer>
+</body>
+</html>

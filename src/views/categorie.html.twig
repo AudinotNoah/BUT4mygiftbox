@@ -1,11 +1,14 @@
-<h1>Catégorie : {{ categorie.libelle }}</h1>
-<p>ID : {{ categorie.id }}</p>
-<p>Description : {{ categorie.description|default('N/A') }}</p>
+{% extends "layout.html.twig" %}
 
-<p>
-    <a href="{{ url_for('prestations_par_categorie', {'id': categorie.id}) }}">
-        Voir les prestations de cette catégorie
-    </a>
-</p>
+{% block title %}Catégorie : {{ categorie.libelle }}{% endblock %}
 
-<p><a href="{{ url_for('liste_categories') }}">Retour à la liste des catégories</a></p>
+{% block content %}
+    <h2>Catégorie : {{ categorie.libelle }}</h2>
+    <p>ID : {{ categorie.id }}</p>
+    <p>Description : {{ categorie.description|default('N/A') }}</p>
+    <p>
+        <a href="{{ url_for('prestations_par_categorie', {'id': categorie.id}) }}">
+            Voir les prestations
+        </a>
+    </p>
+{% endblock %}

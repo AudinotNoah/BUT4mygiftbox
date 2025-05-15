@@ -1,0 +1,28 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Détails Coffret : {{ coffretType.libelle }}{% endblock %}
+
+{% block content %}
+    <h2>{{ coffretType.libelle }}</h2>
+    <p><strong>ID :</strong> {{ coffretType.id }}</p>
+    {% if coffretType.description %}
+        <p><strong>Description :</strong><br>{{ coffretType.description|nl2br }}</p>
+    {% endif %}
+
+    <h3>Prestations incluses :</h3>
+    {% if coffretType.prestations is empty %}
+        <p>Aucune prestation définie pour ce coffret type.</p>
+    {% else %}
+        <ul>
+            {% for prestation in coffretType.prestations %}
+                <li>
+                    {{ prestation.libelle }}
+                    <em>(Tarif: {{ prestation.tarif }})</em>
+                    <a href="{{ url_for('details_prestation', {}, {'id': prestation.id}) }}">(voir)</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <p><a href="{{ url_for('liste_coffrets_par_theme') }}">Retour à la liste des coffrets</a></p>
+{% endblock %}

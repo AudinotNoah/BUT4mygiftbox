@@ -1,0 +1,30 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Nos Coffrets par Thème{% endblock %}
+
+{% block content %}
+    <h2>Nos Coffrets Cadeaux par Thème</h2>
+
+    {% if themes is empty %}
+        <p>Aucun thème ou coffret disponible pour le moment.</p>
+    {% else %}
+        {% for theme in themes %}
+            <h3>Thème : {{ theme.libelle }}</h3>
+            {% if theme.coffretTypes is empty %}
+                <p>Aucun coffret pour ce thème.</p>
+            {% else %}
+                <ul>
+                    {% for coffret in theme.coffretTypes %}
+                        <li>
+                            <a href="{{ url_for('details_coffret_type', {'id': coffret.id}) }}">
+                                {{ coffret.libelle }}
+                            </a>
+                            {% if coffret.description %}- {{ coffret.description|slice(0, 50) }}...{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <hr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

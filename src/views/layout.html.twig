@@ -11,15 +11,16 @@
 
     <nav>
         <ul>
+            <li><a href="{{ url_for('home') }}">Accueil</a></li>
             <li><a href="{{ url_for('liste_categories') }}">Catégories</a></li>
-        </ul>
+            <li><a href="{{ url_for('liste_coffrets_par_theme') }}">Nos Coffrets</a></li> 
     </nav>
 
     <hr>
 
     <main>
         {% block content %}
-            <p>Contenu par défaut si le bloc n'est pas surchargé.</p>
+            <p>Contenu par défaut</p>
         {% endblock %}
     </main>
 

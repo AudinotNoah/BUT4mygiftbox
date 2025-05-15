@@ -21,9 +21,9 @@ $app = AppFactory::create();
 
 
 $twig = Twig::create(__DIR__ . '/../views', ['cache' => __DIR__ . '/../views/cache', 'auto_reload' => true]);
-$app->add(TwigMiddleware::create($app, $twig));
-
 $app->addRoutingMiddleware();
+
+$app->add(TwigMiddleware::create($app, $twig));
 
 $app->setBasePath('/archi/giftbox.squelette/gift.appli/public');
 

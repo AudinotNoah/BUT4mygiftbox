@@ -14,7 +14,7 @@ class GetCategoriesAction extends AbstractAction
     public function __invoke(Request $request, Response $response, array $args): Response
     {
         try {
-            $categories = Categorie::orderBy('libelle', 'asc')->get();
+            $categories = Categorie::orderBy('libelle', 'desc')->get();
             $view = Twig::fromRequest($request);
             return $view->render($response, 'liste_categories.html.twig', [
                 'categories' => $categories

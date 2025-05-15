@@ -12,31 +12,17 @@ use gift\appli\controllers\GetPrestationByCategorieIdAction;
 
 return function (App $app): App {
 
-    // Route par défaut
-    $app->get('/', function (Request $request, Response $response): Response {
-        $basePath = $request->getUri()->getPath();
-    
-        $html = "<h1>Bienvenue sur MyGiftBox.net</h1>";
-        $html .= "<p><a href='" . $basePath . "categories'>Voir les catégories</a></p>";
-    
-        $response->getBody()->write($html);
-        return $response;
-    });
+    $app->get('/categories', GetCategoriesAction::class)
+        ->setName('liste_categories');
 
-    // GET /categories
-    $app->get('/categories', GetCategoriesAction::class);
+    $app->get('/categorie/{id}', GetCategorieByIdAction::class)
+        ->setName('details_categorie');
 
+    $app->get('/categorie/{id}/prestations', GetPrestationByCategorieIdAction::class)
+        ->setName('prestations_par_categorie');
 
-    // GET /categorie/{id}
-    $app->get('/categorie/{id}', GetCategorieByIdAction::class);
-
-
-    // GET /prestation?id=xxxx
-    $app->get('/prestation', GetPrestationAction::class);
-
-
-    // GET /categorie/{id}/prestations
-    $app->get('/categorie/{id}/prestations', GetPrestationByCategorieIdAction::class);
+    $app->get('/prestation', GetPrestationAction::class) // Route pour /prestation?id=...
+        ->setName('details_prestation');
 
     return $app;
 };

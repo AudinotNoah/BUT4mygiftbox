@@ -1,0 +1,56 @@
+services:
+  web:
+    build:
+      context: .
+    container_name: giftbox_web_apache
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./apache.conf:/etc/apache2/sites-available/000-default.con
+    environment:
+      # faudrait faire un ini mais apres
+      DB_HOST: db
+      DB_DATABASE: giftbox
+      DB_USER: giftbox_user
+      DB_PASSWORD: giftbox_password
+    depends_on:
+      - db 
+    networks:
+      - giftbox_network
+
+  db:
+    image: mysql:latest
+    container_name: giftbox_db_mysql
+    environment:
+      MYSQL_DATABASE: giftbox
+      MYSQL_USER: giftbox_user
+      MYSQL_PASSWORD: giftbox_password
+      MYSQL_ROOT_PASSWORD: root_password_strong
+    volumes:
+      - giftbox_db_data:/var/lib/mysql
+      - ./sql/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./sql/02-data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    networks:
+      - giftbox_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: giftbox_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db 
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root_password_strong
+    depends_on:
+      - db
+    networks:
+      - giftbox_network
+
+volumes:
+  giftbox_db_data:
+
+networks:
+  giftbox_network:
+    driver: bridge

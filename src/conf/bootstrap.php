@@ -11,7 +11,7 @@ use Slim\Views\TwigMiddleware;
 
 try {
    
-    Eloquent::init(__DIR__ . '/conf.ini');
+    Eloquent::init();
 } catch (\Exception $e) {
     echo("FATAL: Erreur initialisation Eloquent dans bootstrap: " . $e->getMessage());
    
@@ -25,7 +25,7 @@ $app->addRoutingMiddleware();
 
 $app->add(TwigMiddleware::create($app, $twig));
 
-$app->setBasePath('/archi/giftbox.squelette/gift.appli/public');
+// $app->setBasePath('/archi/giftbox.squelette/gift.appli/public');
 
 $routesFilePath = __DIR__ . '/routes.php';
 

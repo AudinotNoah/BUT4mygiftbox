@@ -19,8 +19,8 @@ composer.lock
 *.log
 # Ignorer tout dans cache/
 
-src/views/cache/**
-!src/views/cache/.gitkeep
+src/webui/views/cache/**
+!src/webui/views/cache/.gitkeep
 
 logs/
 tmp/

@@ -2,7 +2,7 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as DB;
-use gift\appli\models\Prestation;
+use gift\core\domain\entities\Prestation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 $prestationId = $argv[1];

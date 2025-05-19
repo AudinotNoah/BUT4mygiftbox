@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace gift\appli\controllers;
+namespace gift\webui\actions;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use gift\appli\models\CoffretType;
+use gift\core\domain\entities\CoffretType;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Views\Twig;

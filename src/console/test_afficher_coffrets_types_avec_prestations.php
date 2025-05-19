@@ -2,7 +2,7 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as DB;
-use gift\appli\models\CoffretType;
+use gift\core\domain\entities\CoffretType;
 
 $config = parse_ini_file(__DIR__ . '/../conf/conf.ini');
 

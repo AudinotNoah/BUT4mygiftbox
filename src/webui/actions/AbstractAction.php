@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace gift\appli\controllers;
+namespace gift\webui\actions;
 
 
 abstract class AbstractAction

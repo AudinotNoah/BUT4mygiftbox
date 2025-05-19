@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 
 use Slim\Factory\AppFactory;
-use gift\appli\utils\Eloquent; 
+use gift\infra\Eloquent; 
 use Slim\App;
 use Slim\Views\Twig;           
 use Slim\Views\TwigMiddleware;
@@ -13,14 +13,14 @@ try {
    
     Eloquent::init(__DIR__ . '/conf.ini');
 } catch (\Exception $e) {
-    echo("FATAL: Erreur initialisation Eloquent dans bootstrap: " . $e->getMessage());
+    echo("Erreur initialisation Eloquent dans bootstrap: " . $e->getMessage());
    
 }
 
 $app = AppFactory::create();
 
 
-$twig = Twig::create(__DIR__ . '/../views', ['cache' => __DIR__ . '/../views/cache', 'auto_reload' => true]);
+$twig = Twig::create(__DIR__ . '/../webui/views', ['cache' => __DIR__ . '/../webui/views/cache', 'auto_reload' => true]);
 $app->addRoutingMiddleware();
 
 $app->add(TwigMiddleware::create($app, $twig));

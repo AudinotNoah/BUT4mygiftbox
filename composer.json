@@ -15,7 +15,9 @@
   },
   "autoload": {
     "psr-4" : {
-      "gift\\appli\\": "src/"
+      "gift\\core\\": "src/application_core/",
+      "gift\\infra\\": "src/infrastructure/",
+      "gift\\webui\\": "src/webui/"
     }
 
   }

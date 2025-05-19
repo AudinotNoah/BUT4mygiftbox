@@ -2,7 +2,7 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as DB;
-use gift\appli\models\Categorie;
+use gift\core\domain\entities\Categorie;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 $config = parse_ini_file(__DIR__ . '/../conf/conf.ini');

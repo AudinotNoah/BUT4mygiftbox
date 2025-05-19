@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use Slim\App;
-use gift\appli\controllers\GetCategoriesAction;
-use gift\appli\controllers\GetCategorieByIdAction;
-use gift\appli\controllers\GetPrestationAction;
-use gift\appli\controllers\GetPrestationByCategorieIdAction;
-use gift\appli\controllers\HomeAction;
-use gift\appli\controllers\GetCoffretTypesByThemeAction;
-use gift\appli\controllers\GetCoffretTypeDetailsAction;
+use gift\webui\actions\GetCategoriesAction;
+use gift\webui\actions\GetCategorieByIdAction;
+use gift\webui\actions\GetPrestationAction;
+use gift\webui\actions\GetPrestationByCategorieIdAction;
+use gift\webui\actions\HomeAction;
+use gift\webui\actions\GetCoffretTypesByThemeAction;
+use gift\webui\actions\GetCoffretTypeDetailsAction;
 
 return function (App $app): App {
 

@@ -1,0 +1,48 @@
+networks:
+  giftbox_network:
+    driver: bridge
+
+services:
+  db:
+    image: mariadb:latest
+    environment:
+      MARIADB_DATABASE: giftbox
+      MARIADB_USER: giftbox_user
+      MARIADB_PASSWORD: giftbox_password
+      MARIADB_ROOT_PASSWORD: root_password_strong
+    volumes:
+      - giftbox_db_data:/var/lib/mysql
+      - ./sql/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sql/02-data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+    networks:
+      - giftbox_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db 
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root_password_strong
+    depends_on:
+      - db
+    networks:
+      - giftbox_network
+
+  web:
+    image: operrin/php:8.4.6
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+    working_dir: /var/www/
+    command: sh -c "composer update && php -S 0.0.0.0:80 -t public"
+    networks:
+      - giftbox_network
+    depends_on:
+      - db
+
+
+volumes:
+  giftbox_db_data:

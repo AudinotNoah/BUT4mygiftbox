@@ -25,7 +25,7 @@ $app->addRoutingMiddleware();
 
 $app->add(TwigMiddleware::create($app, $twig));
 
-$app->setBasePath('/archi/giftbox.squelette/gift.appli/public');
+// $app->setBasePath(basePath: '/archi/giftbox.squelette/gift.appli/public');
 
 $routesFilePath = __DIR__ . '/routes.php';
 

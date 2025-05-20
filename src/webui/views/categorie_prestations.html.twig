@@ -4,11 +4,11 @@
 
 {% block content %}
     <h2>Prestations pour : {{ categorie.libelle }}</h2>
-    {% if categorie.prestations is empty %}
+    {% if prestations is empty %}
         <p>Aucune prestation.</p>
     {% else %}
         <ul>
-            {% for prestation in categorie.prestations %}
+            {% for prestation in prestations %}
                 <li>
                     {{ prestation.libelle }}
                     <a href="{{ url_for('details_prestation', {}, {'id': prestation.id}) }}">(détails)</a>

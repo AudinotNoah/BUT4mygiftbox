@@ -10,6 +10,7 @@ use gift\webui\actions\GetPrestationByCategorieIdAction;
 use gift\webui\actions\HomeAction;
 use gift\webui\actions\GetCoffretTypesByThemeAction;
 use gift\webui\actions\GetCoffretTypeDetailsAction;
+use gift\webui\actions\ViewBoxByTokenAction;
 
 return function (App $app): App {
 
@@ -36,6 +37,9 @@ return function (App $app): App {
     // Route pour afficher les détails d'un coffret type
     $app->get('/coffret/{id}', GetCoffretTypeDetailsAction::class)
         ->setName('details_coffret_type');
+
+    $app->get('/box/view/token={token}', ViewBoxByTokenAction::class) 
+        ->setName('view_box_by_token');
 
     return $app;
 };

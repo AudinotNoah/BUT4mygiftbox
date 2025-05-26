@@ -1,0 +1,43 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Votre Coffret : {{ box.libelle }}{% endblock %}
+
+{% block content %}
+    <h1>{{ box.libelle }}</h1>
+
+    {% if box.description %}
+        <p>{{ box.description|nl2br }}</p>
+    {% endif %}
+
+    {% if box.kdo and box.message_kdo %} 
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 15px 0; background-color: #f9f9f9;">
+            <h3>Message pour vous :</h3>
+            <p><em>{{ box.message_kdo|nl2br }}</em></p>
+        </div>
+    {% endif %}
+
+    <h3>Prestations incluses :</h3>
+    {% if box.prestations is empty %}
+        <p>Aucune prestation dans ce coffret.</p>
+    {% else %}
+        <ul>
+            {% for presta_pivot in box.prestations %}
+                <li>
+                    <strong>{{ presta_pivot.libelle }}</strong> (Quantité : {{ presta_pivot.pivot.quantite }})
+                    <br>
+                    {{ presta_pivot.description|nl2br }}
+                    {% if not box.kdo %} 
+                        <br><span>Tarif unitaire : {{ presta_pivot.tarif }} €</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if not box.kdo %} 
+        <hr>
+        <h3>Montant total de la box : {{ box.montant }} €</h3>
+    {% endif %}
+
+    <p style="margin-top: 30px;"><a href="{{ url_for('home') }}">Retour à l'accueil</a></p>
+{% endblock %}

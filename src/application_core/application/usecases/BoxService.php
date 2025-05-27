@@ -26,4 +26,28 @@ class BoxService implements BoxServiceInterface
             throw new BoxNotFoundException("Box non trouvée ou inaccessible avec le token fourni.", 0, $e);
         }
     }
+    
+    public function getCurrentBoxByUserId(string $userId): ?array
+    {
+        $box = Box::where('createur_id', '=', $userId)
+                  ->where('statut', '=', 1) // 1 = en cours de construction
+                  ->with('prestations')
+                  ->first();
+
+        return $box ? $box->toArray() : null;
+    }
+
+
+    public function getPrestationsByBoxId(string $boxId): array
+    {
+        $box = Box::where('id', '=', $boxId)
+                  ->with('prestations')
+                  ->first();
+
+        if (!$box) {
+            throw new BoxNotFoundException("Box non trouvée avec l'ID fourni.");
+        }
+
+        return $box->prestations->toArray();
+    }
 }

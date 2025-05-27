@@ -11,6 +11,7 @@ use gift\webui\actions\HomeAction;
 use gift\webui\actions\GetCoffretTypesByThemeAction;
 use gift\webui\actions\GetCoffretTypeDetailsAction;
 use gift\webui\actions\ViewBoxByTokenAction;
+use gift\webui\actions\ViewCurrentBoxAction;
 
 return function (App $app): App {
 
@@ -40,6 +41,9 @@ return function (App $app): App {
 
     $app->get('/box/view/token={token}', ViewBoxByTokenAction::class) 
         ->setName('view_box_by_token');
+
+    $app->get('/box/current', ViewCurrentBoxAction::class)
+        ->setName('view_current_box');
 
     return $app;
 };

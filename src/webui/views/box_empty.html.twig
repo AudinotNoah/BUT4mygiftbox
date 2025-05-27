@@ -1,0 +1,10 @@
+{# filepath: c:\xampp\htdocs\BUT4mygiftbox\src\webui\views\box_empty.html.twig #}
+{% extends "layout.html.twig" %}
+
+{% block title %}Aucune Box{% endblock %}
+
+{% block content %}
+    <h2>Aucune box en cours de construction</h2>
+    <p>Vous n'avez pas encore commencé à créer une box.</p>
+    <a href="{{ url_for('liste_categories') }}">Commencer à créer une box</a>
+{% endblock %}

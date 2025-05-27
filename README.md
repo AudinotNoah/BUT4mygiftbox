@@ -50,7 +50,7 @@ MyGiftBox.net est une application web permettant de composer et offrir des coffr
 4. Lancer l'application
 
     ```bash
-    docker compose up -d
+    docker-compose up --build -d
     ```
 
 

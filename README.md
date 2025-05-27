@@ -49,16 +49,8 @@ MyGiftBox.net est une application web permettant de composer et offrir des coffr
 
 4. Lancer l'application
 
-    Pour le moment, vous pouvez lancer le projet localement avec PHP (sans Docker) :
-
     ```bash
-    php -S localhost:8000 -t public
-    ```
-
-    Une configuration Docker sera ajoutée plus tard. Lorsque ce sera fait, vous pourrez utiliser :
-
-    ```bash
-    docker compose up -d
+    docker-compose up --build -d
     ```
 
 

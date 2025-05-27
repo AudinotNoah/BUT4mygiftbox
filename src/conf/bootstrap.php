@@ -9,6 +9,10 @@ use Slim\App;
 use Slim\Views\Twig;           
 use Slim\Views\TwigMiddleware;
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 try {
    
     Eloquent::init(__DIR__ . '/conf.ini');

@@ -10,6 +10,8 @@ use Slim\Views\Twig;
 use gift\core\application\usecases\CatalogueServiceInterface;
 use gift\core\application\usecases\CatalogueService;
 
+use gift\webui\providers\CsrfTokenProvider;
+
 class GetCategoriesAction extends AbstractAction
 {
     private CatalogueServiceInterface $catalogueService;
@@ -22,6 +24,8 @@ class GetCategoriesAction extends AbstractAction
     public function __invoke(Request $request, Response $response, array $args): Response
     {
         try {
+            // $token = CsrfTokenProvider::generate(); // pour test
+            // print $token;
             $categoriesArray = $this->catalogueService->getCategories();
             $view = Twig::fromRequest($request);
             return $view->render($response, 'liste_categories.html.twig', [

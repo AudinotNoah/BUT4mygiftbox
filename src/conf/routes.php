@@ -13,6 +13,7 @@ use gift\webui\actions\GetCoffretTypeDetailsAction;
 use gift\webui\actions\ViewBoxByTokenAction;
 use gift\webui\actions\CreateBoxAction;
 use gift\webui\actions\GetFormBoxAction;
+use gift\webui\actions\AddPrestationToBoxAction;
 
 return function (App $app): App {
 
@@ -48,6 +49,9 @@ return function (App $app): App {
 
     $app->post('/box/create', GetFormBoxAction::class) 
         ->setName('create_box_post');
+    
+    $app->post('/box/prestation/add', AddPrestationToBoxAction::class)
+        ->setName('add_prestation_to_box');
 
     return $app;
 };

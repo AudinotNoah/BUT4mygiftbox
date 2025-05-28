@@ -11,4 +11,14 @@
     {% if prestation.img %}
         <img src="/images/{{ prestation.img }}" alt="{{ prestation.libelle }}">
     {% endif %}
+
+    <p>{{ prestation.description }}</p>
+  <form action="{{ url_for('add_prestation_to_box') }}" method="POST">
+    <input type="hidden" name="id" value="{{ prestation.id }}">
+    <label>
+      Quantité :
+      <input type="number" name="quantity" value="1" min="1"/>
+    </label>
+    <button type="submit">Ajouter à la box</button>
+  </form>
 {% endblock %}

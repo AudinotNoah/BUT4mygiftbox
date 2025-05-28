@@ -9,20 +9,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use Slim\Exception\HttpNotFoundException;
 
-use gift\core\application\usecases\BoxServiceInterface;
-use gift\core\application\usecases\BoxService;
-
 use gift\webui\providers\CsrfTokenProvider;
 
 
 class CreateBoxAction extends AbstractAction
 {
-    private BoxServiceInterface $boxService;
 
-    public function __construct()
-    {
-        $this->boxService = new BoxService();
-    }
 
     public function __invoke(Request $request, Response $response, array $args): Response
     {

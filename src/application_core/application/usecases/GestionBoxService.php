@@ -20,10 +20,12 @@ class GestionBoxService implements GestionBoxServiceInterface
 {
 
     private BoxServiceInterface $boxService;
+    private CatalogueServiceInterface $catalogueService;
 
     public function __construct()
     {
         $this->boxService = new BoxService();
+        $this->catalogueService = new CatalogueService();
     }
 
     function creerBoxVide(string $userId, array $dataDonneesBox): array {
@@ -44,23 +46,22 @@ class GestionBoxService implements GestionBoxServiceInterface
         return $box->toArray();
     }
 
-    function ajouterPrestationABox(string $boxId, string $prestationId, int $quantite, string $userId): array
+    function ajouterPrestationABox(string $boxId, string $prestationId, int $quantite): array
     {
-        $box = BoxService::getBoxById($boxId);
-        if (!$box) {
-            throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.");
-        }
-
-        $prestation = CatalogueService::getPrestationById($prestationId);
-        if (!$prestation) {
-            throw new PrestationNotFoundException("Prestation avec l'id $prestationId non trouvée.");
-        }
+        $boxData = $this->boxService->getBoxById($boxId);
+        $box = new Box();
+        $box->fill($boxData);
 
         if ($quantite <= 0) {
             throw new ValidationException("La quantité doit être supérieure à zéro.");
         }
 
-        $box->prestations()->attach($prestationId, ['quantity' => $quantity]);
+        $existingPrestation = $box->prestations()->where('id', $prestationId)->first();
+        if ($existingPrestation) {
+            $box->prestations()->updateExistingPivot($prestationId, ['quantite' => $existingPrestation->pivot->quantity + $quantite]);
+        } else {
+            $box->prestations()->attach($prestationId, ['quantite' => $quantite]);
+        }
 
         return $box->toArray();
     }

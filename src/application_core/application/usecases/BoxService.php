@@ -26,7 +26,7 @@ class BoxService implements BoxServiceInterface
             throw new BoxNotFoundException("Box non trouvée ou inaccessible avec le token fourni.", 0, $e);
         }
     }
-<<<<<<< HEAD
+
     
     public function getCurrentBoxByUserId(string $userId): ?array
     {
@@ -51,7 +51,7 @@ class BoxService implements BoxServiceInterface
 
         return $box->prestations->toArray();
     }
-=======
+
 
     public function getBoxById(string $boxId): array
     {
@@ -65,5 +65,4 @@ class BoxService implements BoxServiceInterface
     
 
 
->>>>>>> 567663a65ff9fd7df6022e55ed10df97a90a85db
 }

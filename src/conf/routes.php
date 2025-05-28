@@ -11,12 +11,9 @@ use gift\webui\actions\HomeAction;
 use gift\webui\actions\GetCoffretTypesByThemeAction;
 use gift\webui\actions\GetCoffretTypeDetailsAction;
 use gift\webui\actions\ViewBoxByTokenAction;
-<<<<<<< HEAD
-use gift\webui\actions\ViewCurrentBoxAction;
-=======
 use gift\webui\actions\CreateBoxAction;
 use gift\webui\actions\GetFormBoxAction;
->>>>>>> 567663a65ff9fd7df6022e55ed10df97a90a85db
+use gift\webui\actions\ViewCurrentBoxAction;
 
 return function (App $app): App {
 
@@ -47,16 +44,16 @@ return function (App $app): App {
     $app->get('/box/view/token={token}', ViewBoxByTokenAction::class) 
         ->setName('view_box_by_token');
 
-<<<<<<< HEAD
+
     $app->get('/box/current', ViewCurrentBoxAction::class)
         ->setName('view_current_box');
-=======
+
     $app->get('/box/create', CreateBoxAction::class)
         ->setName('create_box');
 
     $app->post('/box/create', GetFormBoxAction::class) 
         ->setName('create_box_post');
->>>>>>> 567663a65ff9fd7df6022e55ed10df97a90a85db
+
 
     return $app;
 };

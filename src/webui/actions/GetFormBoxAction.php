@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Routing\RouteContext;   
 
 use gift\core\application\usecases\GestionBoxServiceInterface;
 use gift\core\application\usecases\GestionBoxService;
@@ -52,10 +53,15 @@ class GetFormBoxAction extends AbstractAction
             ];
             $box = $gestionBoxService->creerBoxVide('test', $boxData);
 
-            $view = Twig::fromRequest($request);
-            return $view->render($response, 'form_nouvelle_box.twig', [
-                'csrf' => $csrfToken,
-            ]);
+            $_SESSION['current_box'] = $box;
+
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            // génère l’URL nommée en remplaçant {id}
+            $url = $routeParser->urlFor('view_box_by_token', ['token' => $csrfToken]);
+
+            return $response
+                ->withHeader('Location', $url)
+                ->withStatus(302);
         }catch (\Exception $e) {
                 throw new HttpNotFoundException($request, "Erreur lors de la création de la box : " . $e->getMessage(), $e);
             }

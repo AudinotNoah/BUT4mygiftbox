@@ -10,11 +10,11 @@
     {% else %}
         {% for theme in themes %}
             <h3>Thème : {{ theme.libelle }}</h3>
-            {% if theme.coffretTypes is empty %}
+            {% if theme.coffret_types is empty %}
                 <p>Aucun coffret pour ce thème.</p>
             {% else %}
                 <ul>
-                    {% for coffret in theme.coffretTypes %}
+                    {% for coffret in theme.coffret_types %}
                         <li>
                             <a href="{{ url_for('details_coffret_type', {'id': coffret.id}) }}">
                                 {{ coffret.libelle }}

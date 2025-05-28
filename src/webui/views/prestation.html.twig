@@ -7,4 +7,8 @@
     <p>ID : {{ prestation.id }}</p>
     <p>Description : {{ prestation.description }}</p>
     <p>Tarif : {{ prestation.tarif }} ({{ prestation.unite|default('') }})</p>
+
+    {% if prestation.img %}
+        <img src="/images/{{ prestation.img }}" alt="{{ prestation.libelle }}">
+    {% endif %}
 {% endblock %}

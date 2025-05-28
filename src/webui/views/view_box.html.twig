@@ -39,5 +39,9 @@
         <h3>Montant total de la box : {{ box.montant }} €</h3>
     {% endif %}
 
+    <p style="margin-top: 30px;">
+        <a href="{{ url_for('liste_categories') }}">Retourner au catalogue</a> {# Lien ajouté ici #}
+    </p>
+
     <p style="margin-top: 30px;"><a href="{{ url_for('home') }}">Retour à l'accueil</a></p>
 {% endblock %}

@@ -4,7 +4,7 @@ RewriteEngine On
 
 # #RewriteBase /www/canals5/gift
 # RewriteBase /archi/giftbox.squelette/gift.appli/public
-
+RewriteBase /BUT4mysgiftbox/public/
 
 #
 # Pour interdire l'accès aux répertoires contenant du code

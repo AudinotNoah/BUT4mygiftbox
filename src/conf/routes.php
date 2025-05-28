@@ -13,7 +13,11 @@ use gift\webui\actions\GetCoffretTypeDetailsAction;
 use gift\webui\actions\ViewBoxByTokenAction;
 use gift\webui\actions\CreateBoxAction;
 use gift\webui\actions\GetFormBoxAction;
+<<<<<<< HEAD
 use gift\webui\actions\AddPrestationToBoxAction;
+=======
+use gift\webui\actions\ViewCurrentBoxAction;
+>>>>>>> 650b571a84eea61d75be0e71939f467c87ba8430
 
 return function (App $app): App {
 
@@ -44,6 +48,10 @@ return function (App $app): App {
     $app->get('/box/view/token={token}', ViewBoxByTokenAction::class) 
         ->setName('view_box_by_token');
 
+
+    $app->get('/box/current', ViewCurrentBoxAction::class)
+        ->setName('view_current_box');
+
     $app->get('/box/create', CreateBoxAction::class)
         ->setName('create_box');
 
@@ -52,6 +60,7 @@ return function (App $app): App {
     
     $app->post('/box/prestation/add', AddPrestationToBoxAction::class)
         ->setName('add_prestation_to_box');
+
 
     return $app;
 };

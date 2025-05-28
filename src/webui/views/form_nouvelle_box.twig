@@ -1,0 +1,28 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}New Box - MyGiftBox{% endblock %}
+
+{% block content %}
+
+    <form action={{url_for('create_box_post')}} method="POST">
+
+        <label for="libelle">Nom de la box</label>
+        <input type="text" id="libelle" name="libelle" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label>
+            <input type="checkbox" id="is_gift" name="is_gift">
+            Cadeau ?
+        </label>
+
+        <label for="gift_message">Message (cadeau)</label>
+        <textarea id="gift_message" name="gift_message"></textarea>
+
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+
+        <button type="submit">Créer la box</button>
+
+    </form>
+{% endblock %}

@@ -26,4 +26,17 @@ class BoxService implements BoxServiceInterface
             throw new BoxNotFoundException("Box non trouvée ou inaccessible avec le token fourni.", 0, $e);
         }
     }
+
+    public function getBoxById(string $boxId): array
+    {
+        try {
+            $box = Box::findOrFail($boxId);
+            return $box->toArray();
+        } catch (EloquentModelNotFoundException $e) {
+            throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.", 0, $e);
+        }
+    }
+    
+
+
 }

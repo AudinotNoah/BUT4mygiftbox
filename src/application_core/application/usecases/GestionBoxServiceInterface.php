@@ -9,6 +9,7 @@ use gift\core\domain\exceptions\PrestationNotFoundException;
 use gift\core\domain\exceptions\CoffretTypeNotFoundException;
 use gift\core\domain\exceptions\ValidationException; 
 use gift\core\domain\exceptions\OperationNotPermittedException; 
+use gift\core\domain\entities\Box;
 
 interface GestionBoxServiceInterface
 {

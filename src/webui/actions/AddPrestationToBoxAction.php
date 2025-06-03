@@ -34,10 +34,9 @@ class AddPrestationToBoxAction extends AbstractAction
 
         try {
             $boxArray = $this->gestionBoxService->ajouterPrestationABox($currentBox, $prestationId, $quantity);
-            $_SESSION['current_box'] = $boxArray;
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            $url = $routeParser->urlFor('view_current_box');
+            $url = $routeParser->urlFor('view_current_box', ['token' => $boxArray['token']]);
 
             return $response
                 ->withHeader('Location', $url)

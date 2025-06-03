@@ -60,7 +60,7 @@ class GetFormBoxAction extends AbstractAction
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             // génère l’URL nommée en remplaçant {id}
-            $url = $routeParser->urlFor('view_box_by_token', ['token' => $csrfToken]);
+            $url = $routeParser->urlFor('view_current_box', ['token' => $box['token']]);
 
             return $response
                 ->withHeader('Location', $url)

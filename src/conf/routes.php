@@ -45,7 +45,6 @@ return function (App $app): App {
     $app->get('/box/view/token={token}', ViewBoxByTokenAction::class) 
         ->setName('view_box_by_token');
 
-
     $app->get('/box/current', ViewCurrentBoxAction::class)
         ->setName('view_current_box');
 

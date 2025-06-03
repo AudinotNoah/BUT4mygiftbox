@@ -15,6 +15,7 @@ use gift\webui\actions\CreateBoxAction;
 use gift\webui\actions\GetFormBoxAction;
 use gift\webui\actions\AddPrestationToBoxAction;
 use gift\webui\actions\ViewCurrentBoxAction;
+use gift\webui\actions\ValidateBoxAction;
 
 return function (App $app): App {
 
@@ -58,6 +59,8 @@ return function (App $app): App {
     $app->post('/box/prestation/add', AddPrestationToBoxAction::class)
         ->setName('add_prestation_to_box');
 
+    $app->post('/box/validate', ValidateBoxAction::class)
+        ->setName('validate_box');
 
     return $app;
 };

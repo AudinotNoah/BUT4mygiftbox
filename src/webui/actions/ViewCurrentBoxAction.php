@@ -47,11 +47,4 @@ class ViewCurrentBoxAction extends AbstractAction
             return $response->withHeader('Location', '/box/create')->withStatus(302);
         }
     }
-
-    private function calculateTotal(array $prestations): float 
-    {
-        return array_reduce($prestations, function($total, $prestation) {
-            return $total + ($prestation['tarif'] * $prestation['pivot']['quantite']);
-        }, 0.0);
-    }
 }

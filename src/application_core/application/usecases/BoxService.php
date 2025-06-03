@@ -27,13 +27,12 @@ class BoxService implements BoxServiceInterface
         }
     }
 
-    
-    public function getCurrentBoxByUserId(string $userId): ?array
+    public function getCurrentBox(): ?array
     {
-        $box = Box::where('createur_id', '=', $userId)
-                  ->where('statut', '=', 1) // 1 = en cours de construction
-                  ->with('prestations')
-                  ->first();
+        $box = Box::where('statut', '=', 1) // 1 = en cours de construction
+                 ->with('prestations')
+                 ->orderBy('created_at', 'desc')
+                 ->first();
 
         return $box ? $box->toArray() : null;
     }

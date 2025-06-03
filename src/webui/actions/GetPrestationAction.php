@@ -24,18 +24,27 @@ class GetPrestationAction extends AbstractAction
 
     public function __invoke(Request $request, Response $response, array $args): Response
     {
-        $queryParams = $request->getQueryParams();
-        $prestationId = $queryParams['id'] ?? null;
-
-        if ($prestationId === null) {
-            throw new HttpBadRequestException($request, "Paramètre 'id' requis pour la prestation.");
-        }
+        
         try {
+                        
+            
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            
+            $prestationId = $request->getQueryParams()['id'] ?? null;
+            if (!$prestationId) {
+                throw new HttpBadRequestException($request, "ID prestation manquant");
+            }
+
             $prestationArray = $this->catalogueService->getPrestationById($prestationId);
+            
             $view = Twig::fromRequest($request);
             return $view->render($response, 'prestation.html.twig', [
-                'prestation' => $prestationArray
+                'prestation' => $prestationArray,
+                'session' => $_SESSION
             ]);
+            
         } catch (PrestationNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);
         }

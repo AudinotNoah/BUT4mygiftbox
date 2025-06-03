@@ -13,11 +13,8 @@ use gift\webui\actions\GetCoffretTypeDetailsAction;
 use gift\webui\actions\ViewBoxByTokenAction;
 use gift\webui\actions\CreateBoxAction;
 use gift\webui\actions\GetFormBoxAction;
-<<<<<<< HEAD
 use gift\webui\actions\AddPrestationToBoxAction;
-=======
 use gift\webui\actions\ViewCurrentBoxAction;
->>>>>>> 650b571a84eea61d75be0e71939f467c87ba8430
 
 return function (App $app): App {
 

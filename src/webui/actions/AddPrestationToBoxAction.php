@@ -37,7 +37,7 @@ class AddPrestationToBoxAction extends AbstractAction
             $_SESSION['current_box'] = $boxArray;
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            $url = $routeParser->urlFor('view_box_by_token', ['token' => $boxArray['token']]);
+            $url = $routeParser->urlFor('view_current_box');
 
             return $response
                 ->withHeader('Location', $url)

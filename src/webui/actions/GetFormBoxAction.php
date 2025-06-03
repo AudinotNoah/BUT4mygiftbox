@@ -23,7 +23,10 @@ class GetFormBoxAction extends AbstractAction
     {
         try {
             $newBoxData = $request->getParsedBody();
-            $csrfToken = $newBoxData['csrf'];;
+            $csrfToken = $newBoxData['csrf'] ?? null;
+            if (!$csrfToken) {
+                throw new \Exception("CSRF token manquant");
+            }
             try{
                 (new CsrfTokenProvider())->check($csrfToken);
             }catch (\Exception $e) {

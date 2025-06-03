@@ -13,12 +13,19 @@
     {% endif %}
 
     <p>{{ prestation.description }}</p>
-  <form action="{{ url_for('add_prestation_to_box') }}" method="POST">
-    <input type="hidden" name="id" value="{{ prestation.id }}">
-    <label>
-      Quantité :
-      <input type="number" name="quantity" value="1" min="1"/>
-    </label>
-    <button type="submit">Ajouter à la box</button>
-  </form>
+
+    {% if session.current_box %}
+      <form action="{{ url_for('add_prestation_to_box') }}" method="POST">
+        <input type="hidden" name="id" value="{{ prestation.id }}">
+        <label>
+          Quantité :
+          <input type="number" name="quantity" value="1" min="1" required/>
+        </label>
+        <button type="submit">Ajouter à la box</button>
+      </form>
+
+
+    {% else %}
+            <p>Vous devez d'abord <a href="{{ url_for('create_box') }}">créer une box</a> avant d'ajouter des prestations.</p>
+    {% endif %}
 {% endblock %}

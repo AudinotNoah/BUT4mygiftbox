@@ -31,9 +31,12 @@ class GestionBoxService implements GestionBoxServiceInterface
     function creerBoxVide(string $userId, array $dataDonneesBox): array {
         $box = new Box();
 
+        $token = random_bytes(32);
+        $token = bin2hex($token);
+
         $box->fill([
             'id' => Uuid::uuid4()->toString(),
-            'token' => $dataDonneesBox['csrf'],
+            'token' => $token,
             'libelle' => $dataDonneesBox['libelle'] ?? '',
             'description' => $dataDonneesBox['description'] ?? '',
             'montant' => 0.0,

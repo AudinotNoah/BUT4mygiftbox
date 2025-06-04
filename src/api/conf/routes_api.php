@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Slim\App;
 use gift\api\actions\GetCategoriesApiAction;
 use gift\api\actions\GetBoxByIdApiAction;
+use gift\api\actions\GetPrestationsApiAction;
+use gift\api\actions\GetPrestationsByCategorieApiAction;
 
 return function (App $app): App {
 
@@ -15,6 +17,12 @@ return function (App $app): App {
 
         $group->get('/box/{id}', GetBoxByIdApiAction::class) 
               ->setName('api_details_box');
+
+        $group->get('/prestations', GetPrestationsApiAction::class)
+              ->setName('api_liste_prestations');
+
+        $group->get('/categories/{id}/prestations', GetPrestationsByCategorieApiAction::class)
+              ->setName('api_prestations_par_categorie');
 
     });
 

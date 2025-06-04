@@ -63,4 +63,12 @@ class CatalogueService implements CatalogueServiceInterface
             throw new CoffretTypeNotFoundException("Coffret type avec l'id $id non trouvé.", 0, $e);
         }
     }
+
+    public function getToutesPrestationsAvecDetails(): array
+    {
+        return Prestation::with('categorie')
+                        ->orderBy('libelle', 'asc')
+                        ->get()
+                        ->toArray();
+    }
 }

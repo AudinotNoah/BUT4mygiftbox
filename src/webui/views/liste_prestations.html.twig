@@ -1,0 +1,32 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Catalogue des Prestations{% endblock %}
+
+{% block content %}
+    <h2>Catalogue des Prestations</h2>
+
+    {% if prestations is empty %}
+        <p>Aucune prestation disponible pour le moment.</p>
+    {% else %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+
+            {% for prestation in prestations %}
+                <div style="border: 1px solid #ddd; padding: 15px; text-align: center; background-color: #f9f9f9; border-radius: 5px;">
+                    <a href="{{ url_for('details_prestation', {}, {'id': prestation.id}) }}" style="text-decoration: none; color: inherit;">
+                        <img src="/images/{{ prestation.img }}" alt="{{ prestation.libelle }}" style="width: 100%; height: 180px; object-fit: cover; margin-bottom: 10px; border-radius: 3px;">
+                        <h3 style="margin-top: 0; margin-bottom: 5px; font-size: 1.2em;">{{ prestation.libelle }}</h3>
+                    </a>
+
+                    <p style="margin-bottom: 5px; font-size: 1.1em; color: #333;">
+                        <strong>Prix :</strong> {{ prestation.tarif }} €
+                    </p>
+                    <p style="margin-bottom: 10px; font-size: 0.9em; color: #666;">
+                        Catégorie : {{ prestation.categorie.libelle|default('N/A') }}
+                    </p>
+
+                </div>
+            {% endfor %}
+
+        </div>
+    {% endif %}
+{% endblock %}

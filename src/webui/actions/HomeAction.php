@@ -14,7 +14,8 @@ class HomeAction extends AbstractAction
     {
         $view = Twig::fromRequest($request);
         return $view->render($response, 'home.html.twig', [
-            'message_accueil' => 'Bienvenue sur MyGiftBox.net !'
+            'message_accueil' => 'Bienvenue sur MyGiftBox.net !', 
+            'user' => $_SESSION['user'] ?? null
         ]);
     }
 }

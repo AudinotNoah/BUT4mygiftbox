@@ -18,7 +18,7 @@ class CatalogueService implements CatalogueServiceInterface
 {
     public function getCategories(): array
     {
-        return Categorie::orderBy('libelle', 'asc')->get()->toArray();
+        return Categorie::orderBy('id', 'asc')->get()->toArray();
     }
 
     public function getCategorieById(int $id): array

@@ -17,7 +17,8 @@
     "psr-4" : {
       "gift\\core\\": "src/application_core/",
       "gift\\infra\\": "src/infrastructure/",
-      "gift\\webui\\": "src/webui/"
+      "gift\\webui\\": "src/webui/",
+      "gift\\api\\": "src/api/"
     }
 
   }

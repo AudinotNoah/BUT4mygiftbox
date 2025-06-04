@@ -2,42 +2,47 @@
 
 declare(strict_types=1);
 
-
 use Slim\Factory\AppFactory;
-use gift\infra\Eloquent; 
+use gift\infra\Eloquent;
 use Slim\App;
-use Slim\Views\Twig;           
+use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    session_start(); 
 }
 
 try {
-   
     Eloquent::init(__DIR__ . '/conf.ini');
 } catch (\Exception $e) {
-    echo("Erreur initialisation Eloquent dans bootstrap: " . $e->getMessage());
-   
+    error_log("FATAL: Erreur initialisation Eloquent: " . $e->getMessage());
+    die("Erreur critique lors de l'initialisation de la base de données. Veuillez vérifier les logs.");
 }
 
 $app = AppFactory::create();
 
+$templatePath = __DIR__ . '/../webui/views';
+$cachePath = __DIR__ . '/../webui/views/cache';
+$twig = Twig::create($templatePath, ['cache' => $cachePath, 'auto_reload' => true]);
 
-$twig = Twig::create(__DIR__ . '/../webui/views', ['cache' => __DIR__ . '/../webui/views/cache', 'auto_reload' => true]);
-$app->addRoutingMiddleware();
-
+$app->addRoutingMiddleware(); 
 $app->add(TwigMiddleware::create($app, $twig));
 
-// $app->setBasePath(basePath: '/archi/giftbox.squelette/gift.appli/public');
+$routesWebUIFilePath = __DIR__ . '/routes.php';
+if (file_exists($routesWebUIFilePath)) {
+    (require_once $routesWebUIFilePath)($app); 
+} else {
+    error_log("Fichier de routes WebUI introuvable: " . $routesWebUIFilePath);
+}
 
-$routesFilePath = __DIR__ . '/routes.php';
+$routesApiFilePath = __DIR__ . '/../api/conf/routes_api.php'; 
+if (file_exists($routesApiFilePath)) {
+    (require_once $routesApiFilePath)($app); 
+} else {
+    error_log("Fichier de routes API introuvable: " . $routesApiFilePath);
+}
 
-$app = (require_once $routesFilePath)($app);
 
-
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
-
-
+$app->addErrorMiddleware(true, true, true);
 
 return $app;

@@ -17,6 +17,11 @@ use gift\webui\actions\GetFormBoxAction;
 use gift\webui\actions\AddPrestationToBoxAction;
 use gift\webui\actions\ViewCurrentBoxAction;
 use gift\webui\actions\ValidateBoxAction;
+use gift\webui\actions\SignInAction;
+use gift\webui\actions\GetSignInFormAction;
+use gift\webui\actions\GetRegisterFormAction;
+use gift\webui\actions\RegisterAction;
+use gift\webui\actions\LogoutAction;
 
 return function (App $app): App {
 
@@ -64,6 +69,21 @@ return function (App $app): App {
 
     $app->get('/prestations', GetPrestationsAction::class)
         ->setName('liste_prestations');
+
+    $app->get('/signin', GetSignInFormAction::class)
+        ->setName('signin_get');
+
+    $app->post('/signin', SignInAction::class)
+        ->setName('signin_post');
+
+    $app->get('/register', GetRegisterFormAction::class)
+        ->setName('register_get');
+
+    $app->post('/register', RegisterAction::class)
+        ->setName('register_post');
+
+    $app->get('/logout', LogoutAction::class)
+        ->setName('logout');
 
     return $app;
 };

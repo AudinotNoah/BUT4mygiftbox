@@ -1,0 +1,21 @@
+{%extends "layout.html.twig" %}
+
+{% block title %}Sign In - MyGiftBox{% endblock %}
+
+{% block content %}
+
+    <form action={{url_for('signin_post')}} method="POST">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+
+        <button type="submit">Connexion</button>
+
+    </form>
+{% endblock %}

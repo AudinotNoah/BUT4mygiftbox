@@ -1,0 +1,23 @@
+{%extends "layout.html.twig" %}
+
+{% block title %}Register - MyGiftBox{% endblock %}
+
+{% block content %}
+
+    <form action={{url_for('register_post')}} method="POST">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="cpassword">Confirmez Password</label>
+        <input type="password" id="cpassword" name="cpassword" required>
+
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+
+        <button type="submit">Register</button>
+
+    </form>
+{% endblock %}

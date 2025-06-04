@@ -17,7 +17,7 @@
     {% endif %}
 
     <h3>Prestations incluses :</h3>
-    {% if box.prestations is empty %}
+    {% if box.prestations is empty and box.statut == 1 %}
         <p>Aucune prestation dans ce coffret.</p>
     {% else %}
         <ul>
@@ -41,6 +41,16 @@
     {% if not box.kdo %} 
         <hr>
         <h3>Montant total de la box : {{ total }} €</h3>
+    {% endif %}
+
+    {% if not box.kdo and box.prestations|length >= 2 and box.statut == 1 %}
+        <form action="{{ url_for('validate_box') }}" method="POST">
+            <button type="submit" class="btn btn-primary">Valider la box</button>
+        </form>
+    {% endif %}
+
+    {% if box.statut == 2 %}
+        <p class="alert alert-info">Cette box a été validée et ne peut plus être modifiée.</p>
     {% endif %}
 
     <p style="margin-top: 30px;"><a href="{{ url_for('home') }}">Retour à l'accueil</a></p>

@@ -7,6 +7,7 @@ use gift\webui\actions\GetCategoriesAction;
 use gift\webui\actions\GetCategorieByIdAction;
 use gift\webui\actions\GetPrestationAction;
 use gift\webui\actions\GetPrestationByCategorieIdAction;
+use gift\webui\actions\GetPrestationsAction;
 use gift\webui\actions\HomeAction;
 use gift\webui\actions\GetCoffretTypesByThemeAction;
 use gift\webui\actions\GetCoffretTypeDetailsAction;
@@ -15,6 +16,7 @@ use gift\webui\actions\CreateBoxAction;
 use gift\webui\actions\GetFormBoxAction;
 use gift\webui\actions\AddPrestationToBoxAction;
 use gift\webui\actions\ViewCurrentBoxAction;
+use gift\webui\actions\ValidateBoxAction;
 
 return function (App $app): App {
 
@@ -57,6 +59,11 @@ return function (App $app): App {
     $app->post('/box/prestation/add', AddPrestationToBoxAction::class)
         ->setName('add_prestation_to_box');
 
+    $app->post('/box/validate', ValidateBoxAction::class)
+        ->setName('validate_box');
+
+    $app->get('/prestations', GetPrestationsAction::class)
+        ->setName('liste_prestations');
 
     return $app;
 };

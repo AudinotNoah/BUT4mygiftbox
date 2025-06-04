@@ -9,6 +9,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use gift\core\application\usecases\BoxServiceInterface;
 use gift\core\application\usecases\BoxService;
+use Slim\Routing\RouteContext;
+
 
 class ViewCurrentBoxAction extends AbstractAction
 {
@@ -23,10 +25,14 @@ class ViewCurrentBoxAction extends AbstractAction
     {
         try {
             $box = $this->boxService->getCurrentBox();
-
             if (!$box) {
                 $view = Twig::fromRequest($request);
-                return $view->render($response, 'box_empty.html.twig', ['liste_categories_url' => $this->router->urlFor('liste_categories')]);
+                $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+                $url = $routeParser->urlFor('create_box');
+
+                return $view->render($response, 'box_empty.html.twig', [
+                    'create_box_url' => $routeParser->urlFor('create_box')
+                ]);
             }
 
             $prestations = $this->boxService->getPrestationsByBoxId($box['id']);
@@ -46,12 +52,5 @@ class ViewCurrentBoxAction extends AbstractAction
         } catch (\Exception $e) {
             return $response->withHeader('Location', '/box/create')->withStatus(302);
         }
-    }
-
-    private function calculateTotal(array $prestations): float 
-    {
-        return array_reduce($prestations, function($total, $prestation) {
-            return $total + ($prestation['tarif'] * $prestation['pivot']['quantite']);
-        }, 0.0);
     }
 }

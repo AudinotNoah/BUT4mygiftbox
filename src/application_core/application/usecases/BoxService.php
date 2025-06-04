@@ -29,12 +29,15 @@ class BoxService implements BoxServiceInterface
 
     public function getCurrentBox(): ?array
     {
-        $box = Box::where('statut', '=', 1) // 1 = en cours de construction
-                 ->with('prestations')
-                 ->orderBy('created_at', 'desc')
+        try {
+            $box = Box::with('prestations')
+                 ->where('id', $_SESSION['current_box']['id'] ?? '')
                  ->first();
 
-        return $box ? $box->toArray() : null;
+            return $box ? $box->toArray() : null;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
 

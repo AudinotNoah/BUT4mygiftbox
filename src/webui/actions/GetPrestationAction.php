@@ -42,7 +42,8 @@ class GetPrestationAction extends AbstractAction
             $view = Twig::fromRequest($request);
             return $view->render($response, 'prestation.html.twig', [
                 'prestation' => $prestationArray,
-                'session' => $_SESSION
+                'session' => $_SESSION,
+                'user' => $_SESSION['user'] ?? null
             ]);
             
         } catch (PrestationNotFoundException $e) {

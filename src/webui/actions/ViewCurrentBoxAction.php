@@ -47,7 +47,8 @@ class ViewCurrentBoxAction extends AbstractAction
             $view = Twig::fromRequest($request);
             return $view->render($response, 'view_box.html.twig', [
                 'box' => $box,
-                'total' => $total
+                'total' => $total,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (\Exception $e) {
             return $response->withHeader('Location', '/box/create')->withStatus(302);

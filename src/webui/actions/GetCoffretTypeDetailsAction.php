@@ -29,7 +29,8 @@ class GetCoffretTypeDetailsAction extends AbstractAction
 
             $view = Twig::fromRequest($request);
             return $view->render($response, 'details_coffret_type.html.twig', [
-                'coffretType' => $coffretTypeArray
+                'coffretType' => $coffretTypeArray,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (CoffretTypeNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);

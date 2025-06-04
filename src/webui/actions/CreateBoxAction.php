@@ -23,6 +23,7 @@ class CreateBoxAction extends AbstractAction
             $view = Twig::fromRequest($request);
             return $view->render($response, 'form_nouvelle_box.twig', [
                 'csrf' => $csrfToken,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (\Exception $e) {
             throw new HttpNotFoundException($request, "Erreur lors de la création de la box : " . $e->getMessage(), $e);

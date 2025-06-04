@@ -29,7 +29,8 @@ class GetCategoriesAction extends AbstractAction
             $categoriesArray = $this->catalogueService->getCategories();
             $view = Twig::fromRequest($request);
             return $view->render($response, 'liste_categories.html.twig', [
-                'categories' => $categoriesArray
+                'categories' => $categoriesArray,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (\Exception $e) {
             throw $e;

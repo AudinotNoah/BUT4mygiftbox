@@ -32,7 +32,8 @@ class GetPrestationByCategorieIdAction extends AbstractAction
             $view = Twig::fromRequest($request);
             return $view->render($response, 'categorie_prestations.html.twig', [
                 'categorie' => $categorieInfo,
-                'prestations' => $prestationsArray
+                'prestations' => $prestationsArray,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (CategorieNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);

@@ -25,7 +25,8 @@ class GetCoffretTypesByThemeAction extends AbstractAction
             $themesArray = $this->catalogueService->getThemesCoffrets();
             $view = Twig::fromRequest($request);
             return $view->render($response, 'liste_coffrets_par_theme.html.twig', [
-                'themes' => $themesArray
+                'themes' => $themesArray,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (\Exception $e) {
             throw $e;

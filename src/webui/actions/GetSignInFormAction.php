@@ -24,6 +24,7 @@ class GetSignInFormAction extends AbstractAction
             $view = Twig::fromRequest($request);
             return $view->render($response, 'form_signin.twig', [
                 'csrf' => $csrfToken,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (\Exception $e) {
             throw new HttpNotFoundException($request, "Erreur lors de l'affichage du formulaire de connexion : " . $e->getMessage(), $e);

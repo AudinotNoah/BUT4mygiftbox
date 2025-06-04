@@ -23,7 +23,8 @@ class GetPrestationsAction extends AbstractAction
             $prestationsArray = $this->catalogueService->getToutesPrestationsAvecDetails();
             $view = Twig::fromRequest($request);
             return $view->render($response, 'liste_prestations.html.twig', [
-                'prestations' => $prestationsArray
+                'prestations' => $prestationsArray,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (\Exception $e) {
             throw $e;

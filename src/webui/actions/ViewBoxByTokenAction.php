@@ -36,7 +36,8 @@ class ViewBoxByTokenAction extends AbstractAction
             return $view->render($response, 'view_box.html.twig', [
                 'box' => $boxData,
                 'is_gift_mode' => (bool)$boxData['kdo'],
-                'is_print_mode' => $isPrintMode
+                'is_print_mode' => $isPrintMode,
+                'user' => $_SESSION['user'] ?? null
             ]);
         } catch (BoxNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);

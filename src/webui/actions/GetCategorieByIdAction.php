@@ -29,7 +29,8 @@ class GetCategorieByIdAction extends AbstractAction
             $categorieDataArray = $this->catalogueService->getCategorieById($id);
             $view = Twig::fromRequest($request);
             return $view->render($response, 'categorie.html.twig', [
-                'categorie' => $categorieDataArray
+                'categorie' => $categorieDataArray,
+                'user' => $_SESSION['user'] ?? null
             ]);
 
         } catch (CategorieNotFoundException $e) {

@@ -36,7 +36,7 @@ class ValidateBoxAction extends AbstractAction
             $_SESSION['current_box'] = $boxArray;
             
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            $url = $routeParser->urlFor('view_current_box');
+            $url = $routeParser->urlFor('view_current_box',['user' => $_SESSION['user'] ?? null]);
 
             // Rediriger vers la vue de la box
             return $response

@@ -53,6 +53,7 @@ class GetFormBoxAction extends AbstractAction
                 'isCadeau' => $isCadeau,
                 'message_kdo' => $isCadeau ? $newBoxData['gift_message'] : null,
                 'csrf' => $csrfToken,
+                
             ];
             $box = $gestionBoxService->creerBoxVide('test', $boxData);
 
@@ -60,7 +61,7 @@ class GetFormBoxAction extends AbstractAction
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             // génère l’URL nommée en remplaçant {id}
-            $url = $routeParser->urlFor('view_current_box', ['token' => $box['token']]);
+            $url = $routeParser->urlFor('view_current_box', ['token' => $box['token'],'user' => $_SESSION['user'] ?? null]);
 
             return $response
                 ->withHeader('Location', $url)

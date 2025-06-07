@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Routing\RouteContext;
-
 use gift\core\application\usecases\GestionBoxService;
 use gift\webui\providers\CsrfTokenProvider;
 
@@ -19,64 +18,54 @@ class GetFormBoxAction extends AbstractAction
     {
         try {
             $newBoxData = $request->getParsedBody();
-            $csrfToken = $newBoxData['csrf'] ?? null;
 
-            if (!$csrfToken) {
-                throw new \Exception("CSRF token manquant");
-            }
-
-            try {
-                (new CsrfTokenProvider())->check($csrfToken);
-            } catch (\Exception $e) {
-                throw new HttpNotFoundException($request, "Token CSRF invalide : " . $e->getMessage(), $e);
-            }
+            $csrfToken = $newBoxData['csrf'] ?? '';
+            (new CsrfTokenProvider())->check($csrfToken);
 
             $user = $_SESSION['user'] ?? throw new HttpUnauthorizedException($request, 'Utilisateur non connecté.');
             $userId = $user['id'];
 
-            // Validation et nettoyage des données
-            $verifLib     = filter_var($newBoxData['libelle'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $verifDesc    = filter_var($newBoxData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $verifMsgKdo  = filter_var($newBoxData['gift_message'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $libelleNettoye = filter_var($newBoxData['libelle'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $descriptionNettoyee = filter_var($newBoxData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $messageKdoNettoye = filter_var($newBoxData['gift_message'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if ($verifLib !== $newBoxData['libelle'] ||
-                $verifDesc != $newBoxData['description'] ||
-                $verifMsgKdo != $newBoxData['gift_message']) {
-                throw new \Exception("Les données de la box contiennent des caractères non autorisés.");
+            if ($libelleNettoye !== $newBoxData['libelle'] ||
+                $descriptionNettoyee !== $newBoxData['description'] ||
+                $messageKdoNettoye !== $newBoxData['gift_message']) {
             }
 
             $isCadeau = isset($newBoxData['is_gift']) && $newBoxData['is_gift'] === 'on' ? 1 : 0;
 
-            $boxData = [
-                'libelle' => $newBoxData['libelle'],
-                'description' => $newBoxData['description'],
+            $dataPourService = [
+                'libelle' => $libelleNettoye,
+                'description' => $descriptionNettoyee,
                 'isCadeau' => $isCadeau,
-                'message_kdo' => $isCadeau ? $newBoxData['gift_message'] : null,
+                'message_kdo' => $isCadeau ? $messageKdoNettoye : null,
             ];
 
             $gestionBoxService = new GestionBoxService();
-
             $coffretId = $newBoxData['from_coffret_id'] ?? null;
-            if ($coffretId) {
-                $box = $gestionBoxService->creerBoxDepuisType($userId, (int)$coffretId, $boxData);
+
+            if ($coffretId && is_numeric($coffretId)) {
+                print("dait");
+                die();
+                $box = $gestionBoxService->creerBoxDepuisType($userId, (int)$coffretId, $dataPourService);
             } else {
-                $box = $gestionBoxService->creerBoxVide($userId, $boxData);
+                $box = $gestionBoxService->creerBoxVide($userId, $dataPourService);
             }
 
             $_SESSION['current_box'] = $box;
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            $url = $routeParser->urlFor('view_current_box', [
-                'token' => $box['token'],
-                'user' => $user,
-            ]);
+            
+            $url = $routeParser->urlFor('view_current_box');
 
             return $response
                 ->withHeader('Location', $url)
                 ->withStatus(302);
 
         } catch (\Exception $e) {
-            throw new HttpNotFoundException($request, "Erreur lors de la création de la box : " . $e->getMessage(), $e);
+            throw new HttpNotFoundException($request, "Erreur lors de la création de la box. Veuillez réessayer.");
         }
     }
 }

@@ -186,15 +186,14 @@ class GestionBoxService implements GestionBoxServiceInterface
         $box->fill([
             'id' => Uuid::uuid4()->toString(),
             'token' => $token,
-            'libelle' => $dataDonneesBox['libelle'] ?? 'Box personnalisée',
-            'description' => $dataDonneesBox['description'] ?? '',
+            'libelle' => $dataDonneesBox['libelle'],
+            'description' => $dataDonneesBox['description'],
             'montant' => 0.0,
-            'kdo' => $dataDonneesBox['isCadeau'] ?? 0,
-            'message_kdo' => $dataDonneesBox['message_kdo'] ?? null,
+            'kdo' => $dataDonneesBox['isCadeau'],
+            'message_kdo' => $dataDonneesBox['message_kdo'],
             'createur_id' => $userId,
             'statut' => 1,
         ]);
-
         $box->save();
 
         try {
@@ -203,8 +202,11 @@ class GestionBoxService implements GestionBoxServiceInterface
             return $box->toArray();
         }
 
-        foreach ($coffretType->prestations as $prestation) {
-            $box->prestations()->attach($prestation->id, ['quantite' => 1]);
+        $prestationIds = $coffretType->prestations->pluck('id')->all();
+        if (!empty($prestationIds)) {
+
+             $syncData = array_fill_keys($prestationIds, ['quantite' => 1]);
+             $box->prestations()->syncWithoutDetaching($syncData);
         }
         
         $box->load('prestations');

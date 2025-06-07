@@ -23,6 +23,10 @@ class LogoutAction extends AbstractAction
     {
         try {
             $this->authnProvider->logout();
+
+            if (isset($_SESSION['current_box'])) {
+                unset($_SESSION['current_box']);
+            }
             
             return $response->withHeader('Location', '/')->withStatus(302);
         } catch (\Exception $e) {

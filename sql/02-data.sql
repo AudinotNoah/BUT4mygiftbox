@@ -243,3 +243,42 @@ INSERT INTO `user` (`id`, `user_id`, `password`, `role`) VALUES
 ('9c025060-e843-4729-b2cd-44c29636764a',	'admin@gift.net',	'$2y$10$JAC.5T.rdONr/ZtgG8o9ceNiYdV.h03WDL4YjVfpPQKSys4MTkh0K',	100);
 
 -- 2025-05-05 09:32:26
+
+
+-- =================================================================
+--        DONNÉES DE DÉMONSTRATION POUR L'ÉVALUATION
+-- =================================================================
+
+-- Supprime les anciennes données de test pour éviter les conflits si le script est rejoué
+DELETE FROM `user` WHERE `id` = 'prof-test-001';
+DELETE FROM `box` WHERE `createur_id` = 'prof-test-001';
+
+-- -----------------------------------------------------------------
+-- UTILISATEUR DE TEST "PROF"
+-- -----------------------------------------------------------------
+-- Le mot de passe en clair est : profmdp
+-- Le hash à insérer ci-dessous sera généré par le script PHP.
+INSERT INTO `user` (`id`, `user_id`, `password`, `role`) VALUES
+('prof-test-001', 'prof@giftbox.net', '$2y$10$B0VitoxgtwdMb35wThOy0e5lzu5BO0XEc/6MSdLSRh7g3ptI9s.pi', 1);
+
+-- -----------------------------------------------------------------
+-- BOX DE TEST POUR L'UTILISATEUR "PROF"
+-- -----------------------------------------------------------------
+
+-- Scénario 1 : Une box "en cours" pour tester la modification et la validation.
+INSERT INTO `box` (`id`, `token`, `libelle`, `description`, `montant`, `kdo`, `message_kdo`, `statut`, `created_at`, `updated_at`, `createur_id`) VALUES
+('prof-box-en-cours', 'token-prof-en-cours', 'Box de Démonstration (En Cours)', 'Cette box sert à démontrer la modification et la validation.', 0.00, 0, NULL, 1, NOW(), NOW(), 'prof-test-001');
+
+-- Ajout de 2 prestations à cette box "en cours"
+INSERT INTO `box2presta` (`box_id`, `presta_id`, `quantite`) VALUES
+('prof-box-en-cours', '4cca8b8e-0244-499b-8247-d217a4bc542d', 1), -- Champagne (20.00 €)
+('prof-box-en-cours', '8854b992-aa48-4ef7-9048-2d92a8f1a1bb', 2); -- Diner Stanislas (60.00 €) x 2
+
+-- Scénario 2 : Une box "déjà validée" pour tester le partage et l'impression.
+INSERT INTO `box` (`id`, `token`, `libelle`, `description`, `montant`, `kdo`, `message_kdo`, `statut`, `created_at`, `updated_at`, `createur_id`) VALUES
+('prof-box-validee', 'token-prof-validee', 'Coffret "Le Partage"', 'Cette box a déjà été validée et est prête à être partagée.', 71.00, 1, 'Ceci est un cadeau de démonstration !', 2, NOW(), NOW(), 'prof-test-001');
+
+-- Prestations de cette box "validée"
+INSERT INTO `box2presta` (`box_id`, `presta_id`, `quantite`) VALUES
+('prof-box-validee', 'faa3b035-4d22-4a13-a1a7-3b6e19883bd7', 1), -- Visite guidée (11.00 €)
+('prof-box-validee', 'b8559a26-74e1-47e6-8028-aa6ded071d86', 4); -- Opéra (15.00 €) x 4

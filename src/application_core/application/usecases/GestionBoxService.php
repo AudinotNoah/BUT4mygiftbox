@@ -59,6 +59,9 @@ class GestionBoxService implements GestionBoxServiceInterface
         } catch (ModelNotFoundException $e) {
             throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.");
         }
+        if ($box->statut == 2) {
+            throw new BoxAlreadyValidatedException("Impossible d'ajouter une prestation : la box est déjà validée.");
+        }
 
         if ($box->createur_id !== $userId) {
             throw new OperationNotPermittedException("Vous n'êtes pas autorisé à modifier cette box.");
@@ -72,10 +75,6 @@ class GestionBoxService implements GestionBoxServiceInterface
             Prestation::findOrFail($prestationId);
         } catch (ModelNotFoundException $e) {
             throw new PrestationNotFoundException("Prestation avec l'id $prestationId non trouvée.");
-        }
-
-        if ($box->statut == 2) {
-            throw new BoxAlreadyValidatedException("Impossible d'ajouter une prestation : la box est déjà validée.");
         }
 
         if ($quantite <= 0) {

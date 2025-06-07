@@ -6,6 +6,7 @@ namespace gift\core\application\usecases;
 
 use gift\core\application\usecases\BoxServiceInterface;
 use gift\core\domain\entities\Box;
+use gift\core\domain\entities\User;
 use gift\core\domain\exceptions\BoxNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 
@@ -62,6 +63,16 @@ class BoxService implements BoxServiceInterface
             return $box->toArray();
         } catch (EloquentModelNotFoundException $e) {
             throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.", 0, $e);
+        }
+    }
+
+    public function getBoxesByUserId(string $userId): array
+    {
+        try {
+            $user = User::with('boxes')->findOrFail($userId);
+            return $user->boxes->toArray();
+        } catch (ModelNotFoundException $e) {
+            return [];
         }
     }
     

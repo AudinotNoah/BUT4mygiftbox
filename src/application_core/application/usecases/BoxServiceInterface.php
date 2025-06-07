@@ -13,5 +13,6 @@ interface BoxServiceInterface
     public function getBoxByToken(string $urlToken): array;
     public function getCurrentBox(): ?array;
     public function getPrestationsByBoxId(string $boxId): array;
+    public function getBoxesByUserId(string $userId): array;
 
 }

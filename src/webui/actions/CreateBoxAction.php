@@ -18,19 +18,18 @@ class CreateBoxAction extends AbstractAction
 {
     public function __invoke(Request $request, Response $response, array $args): Response
     {
-        if (!isset($_SESSION['user'])) {
-            throw new HttpUnauthorizedException($request, "Vous devez être connecté pour créer une box.");
-        }
+        $fromCoffretId = $request->getQueryParams()['from_coffret'] ?? null;
 
         try {
             $csrfToken = CsrfTokenProvider::generate();
             $view = Twig::fromRequest($request);
             return $view->render($response, 'form_nouvelle_box.twig', [
                 'csrf' => $csrfToken,
-                'user' => $_SESSION['user']
+                'user' => $_SESSION['user'] ?? null,
+                'from_coffret_id' => $fromCoffretId
             ]);
         } catch (\Exception $e) {
-            throw new HttpNotFoundException($request, "Erreur lors de l'affichage du formulaire de création : " . $e->getMessage(), $e);
+            throw new HttpNotFoundException($request, "Erreur lors de la création de la box : " . $e->getMessage(), $e);
         }
     }
 }

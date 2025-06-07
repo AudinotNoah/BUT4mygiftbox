@@ -135,7 +135,7 @@ class GestionBoxService implements GestionBoxServiceInterface
         $box->load('prestations');
         return $box->toArray();
     }
-    //fausse fonction pour l'instant
+
     function afficherBoxEnCours(string $boxId, string $userId): array
     {
         $box = BoxService::getBoxById($boxId);
@@ -178,12 +178,38 @@ class GestionBoxService implements GestionBoxServiceInterface
         return $box->toArray();
     }
 
-    //fausse fonction pour l'instant
-    function creerBoxDepuisType(string $userId, int $coffretTypeId, array $dataDonneesBox): array
+    public function creerBoxDepuisType(string $userId, int $coffretTypeId, array $dataDonneesBox): array
     {
-        // Implémentation de la création d'une box depuis un type de coffret
-        // Cette méthode doit être implémentée en fonction des spécificités du projet
-        throw new \Exception("Cette méthode n'est pas encore implémentée.");
+        $box = new Box();
+        $token = bin2hex(random_bytes(32));
+
+        $box->fill([
+            'id' => Uuid::uuid4()->toString(),
+            'token' => $token,
+            'libelle' => $dataDonneesBox['libelle'] ?? 'Box personnalisée',
+            'description' => $dataDonneesBox['description'] ?? '',
+            'montant' => 0.0,
+            'kdo' => $dataDonneesBox['isCadeau'] ?? 0,
+            'message_kdo' => $dataDonneesBox['message_kdo'] ?? null,
+            'createur_id' => $userId,
+            'statut' => 1,
+        ]);
+
+        $box->save();
+
+        try {
+            $coffretType = CoffretType::with('prestations')->findOrFail($coffretTypeId);
+        } catch (ModelNotFoundException $e) {
+            return $box->toArray();
+        }
+
+        foreach ($coffretType->prestations as $prestation) {
+            $box->prestations()->attach($prestation->id, ['quantite' => 1]);
+        }
+        
+        $box->load('prestations');
+        
+        return $box->toArray();
     }
 
 }

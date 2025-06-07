@@ -4,7 +4,11 @@
 
 {% block content %}
 
-    <form action={{url_for('create_box_post')}} method="POST">
+    <form action="{{ url_for('create_box_post') }}" method="POST">
+        {% if from_coffret_id is not null %}
+            <input type="hidden" name="from_coffret_id" value="{{ from_coffret_id }}">
+            <h3>Création d'une box basée sur un modèle</h3>
+        {% endif %}
 
         <label for="libelle">Nom de la box</label>
         <input type="text" id="libelle" name="libelle" required>

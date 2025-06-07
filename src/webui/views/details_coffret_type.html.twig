@@ -24,5 +24,19 @@
         </ul>
     {% endif %}
 
+    {% if user is not null %}
+        <div style="margin-top: 20px; padding: 10px; border: 1px solid #3498db;">
+            <h4>Utiliser ce modèle</h4>
+            <p>Créez une nouvelle box en utilisant ce coffret comme point de départ. Vous pourrez ensuite la modifier.</p>
+            <a href="{{ url_for('create_box', {'from_coffret': coffretType.id}) }}">
+                <button>Créer une box à partir de ce modèle</button>
+            </a>
+        </div>
+    {% else %}
+        <p style="margin-top: 20px;">
+            <a href="{{ url_for('signin_get') }}">Connectez-vous</a> pour créer une box à partir de ce modèle.
+        </p>
+    {% endif %}
+
     <p><a href="{{ url_for('liste_coffrets_par_theme') }}">Retour à la liste des coffrets</a></p>
 {% endblock %}

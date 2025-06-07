@@ -14,6 +14,8 @@ use gift\core\domain\entities\Box;
 use gift\core\application\usecases\CatalogueService;
 use gift\core\application\usecases\BoxService;
 use Ramsey\Uuid\Uuid;
+use gift\core\domain\entities\Prestation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class GestionBoxService implements GestionBoxServiceInterface
@@ -49,66 +51,93 @@ class GestionBoxService implements GestionBoxServiceInterface
         return $box->toArray();
     }
 
-    function ajouterPrestationABox(string $boxId, string $prestationId, int $quantite): array
+    public function ajouterPrestationABox(string $boxId, string $prestationId, int $quantite, string $userId): array
     {
-        $boxData = $this->boxService->getBoxById($boxId);
-        $box = new Box();
-        $box->fill($boxData);
+        try {
+            $box = Box::findOrFail($boxId);
+        } catch (ModelNotFoundException $e) {
+            throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.");
+        }
+
+        if ($box->createur_id !== $userId) {
+            throw new OperationNotPermittedException("Vous n'êtes pas autorisé à modifier cette box.");
+        }
+
+        if ($box->statut !== 1) { 
+            throw new ValidationException("Impossible d'ajouter une prestation à une box déjà validée.");
+        }
+
+        try {
+            Prestation::findOrFail($prestationId);
+        } catch (ModelNotFoundException $e) {
+            throw new PrestationNotFoundException("Prestation avec l'id $prestationId non trouvée.");
+        }
 
         if ($quantite <= 0) {
             throw new ValidationException("La quantité doit être supérieure à zéro.");
         }
 
-        $existingPrestation = $box->prestations()->where('id', $prestationId)->first();
-        if ($existingPrestation) {
-            $box->prestations()->updateExistingPivot($prestationId, ['quantite' => $existingPrestation->pivot->quantity + $quantite]);
+        $prestationExistante = $box->prestations()->where('presta_id', $prestationId)->first();
+
+        if ($prestationExistante) {
+            $nouvelleQuantite = $prestationExistante->pivot->quantite + $quantite;
+            $box->prestations()->updateExistingPivot($prestationId, ['quantite' => $nouvelleQuantite]);
         } else {
             $box->prestations()->attach($prestationId, ['quantite' => $quantite]);
         }
 
+        $box->load('prestations');
+        
         return $box->toArray();
     }
 
-    //fausse fonciton pour l'instant
     function retirerPrestationDeBox(string $boxId, string $prestationId, string $userId): array
     {
-        $box = BoxService::getBoxById($boxId);
-        if (!$box) {
-            throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.");
+        $box = Box::findOrFail($boxId);
+
+        if ($box->createur_id !== $userId) {
+            throw new OperationNotPermittedException("Action non autorisée.");
+        }
+        if ($box->statut !== 1) {
+            throw new ValidationException("Impossible de modifier une box déjà validée.");
         }
 
-        $prestation = CatalogueService::getPrestationById($prestationId);
-        if (!$prestation) {
-            throw new PrestationNotFoundException("Prestation avec l'id $prestationId non trouvée.");
+        $result = $box->prestations()->detach($prestationId);
+
+        if ($result === 0) {
+            throw new PrestationNotFoundException("Cette prestation n'était pas dans la box.");
         }
 
-        $box->prestations()->detach($prestationId);
-
+        $box->load('prestations');
         return $box->toArray();
     }
 
-    //fausse fonction pour l'instant
+    
+
     function modifierQuantitePrestationDansBox(string $boxId, string $prestationId, int $nouvelleQuantite, string $userId): array
     {
-        $box = BoxService::getBoxById($boxId);
-        if (!$box) {
-            throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.");
-        }
+        $box = Box::findOrFail($boxId);
 
-        $prestation = CatalogueService::getPrestationById($prestationId);
-        if (!$prestation) {
-            throw new PrestationNotFoundException("Prestation avec l'id $prestationId non trouvée.");
+        if ($box->createur_id !== $userId) {
+            throw new OperationNotPermittedException("Action non autorisée.");
         }
-
+        if ($box->statut !== 1) {
+            throw new ValidationException("Impossible de modifier une box déjà validée.");
+        }
+        
         if ($nouvelleQuantite <= 0) {
-            throw new ValidationException("La nouvelle quantité doit être supérieure à zéro.");
+            return $this->retirerPrestationDeBox($boxId, $prestationId, $userId);
         }
 
-        $box->prestations()->updateExistingPivot($prestationId, ['quantity' => $nouvelleQuantite]);
+        $result = $box->prestations()->updateExistingPivot($prestationId, ['quantite' => $nouvelleQuantite]);
+        
+        if ($result === 0) {
+            throw new PrestationNotFoundException("Cette prestation n'était pas dans la box.");
+        }
 
+        $box->load('prestations');
         return $box->toArray();
     }
-
     //fausse fonction pour l'instant
     function afficherBoxEnCours(string $boxId, string $userId): array
     {

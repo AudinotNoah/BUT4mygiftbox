@@ -11,6 +11,7 @@ use Slim\Routing\RouteContext;
 use gift\core\application\usecases\GestionBoxService;
 use gift\core\application\usecases\GestionBoxServiceInterface;
 use gift\core\domain\exceptions\BoxNotFoundException;
+use gift\core\domain\exceptions\BoxAlreadyValidatedException;
 
 class AddPrestationToBoxAction extends AbstractAction
 {
@@ -41,8 +42,20 @@ class AddPrestationToBoxAction extends AbstractAction
             return $response
                 ->withHeader('Location', $url)
                 ->withStatus(302);
+        } catch (BoxAlreadyValidatedException $e) {
+            if (isset($GLOBALS['flash']) && $GLOBALS['flash'] instanceof \Slim\Flash\Messages) {
+                $GLOBALS['flash']->addMessage('error', $e->getMessage());
+            }
+
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            $url = $routeParser->urlFor('view_current_box', [
+                'token' => $_SESSION['current_box']['token'],
+                'user'  => $_SESSION['user'] ?? null
+            ]);
+
+            return $response->withHeader('Location', $url)->withStatus(302);
         } catch (BoxNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);
-        }
+        }   
     }
 }

@@ -10,6 +10,7 @@ use gift\core\domain\exceptions\PrestationNotFoundException;
 use gift\core\domain\exceptions\CoffretTypeNotFoundException;
 use gift\core\domain\exceptions\ValidationException; 
 use gift\core\domain\exceptions\OperationNotPermittedException; 
+use gift\core\domain\exceptions\BoxAlreadyValidatedException; 
 use gift\core\domain\entities\Box;
 use gift\core\application\usecases\CatalogueService;
 use gift\core\application\usecases\BoxService;
@@ -54,6 +55,10 @@ class GestionBoxService implements GestionBoxServiceInterface
         $boxData = $this->boxService->getBoxById($boxId);
         $box = new Box();
         $box->fill($boxData);
+
+        if ($box->statut == 2) {
+            throw new BoxAlreadyValidatedException("Impossible d'ajouter une prestation : la box est déjà validée.");
+        }
 
         if ($quantite <= 0) {
             throw new ValidationException("La quantité doit être supérieure à zéro.");

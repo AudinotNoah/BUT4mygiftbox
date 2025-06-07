@@ -25,6 +25,21 @@ $templatePath = __DIR__ . '/../webui/views';
 $cachePath = __DIR__ . '/../webui/views/cache';
 $twig = Twig::create($templatePath, ['cache' => $cachePath, 'auto_reload' => true]);
 
+
+// 1. Instanciation de Messages
+$flash = new \Slim\Flash\Messages($_SESSION);
+
+// 2. Middleware pour démarrer la session et recharger le flash depuis $_SESSION
+$app->add(function ($request, $handler) use ($flash) {
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+    return $handler->handle($request);
+});
+
+// 3. Injection du flash dans Twig
+$twig->getEnvironment()->addGlobal('flash', $flash);
+
 $app->addRoutingMiddleware(); 
 $app->add(TwigMiddleware::create($app, $twig));
 

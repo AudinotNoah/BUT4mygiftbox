@@ -16,7 +16,7 @@ class ViewBoxByTokenAction extends AbstractAction
 {
     private BoxServiceInterface $boxService;
 
-    public function __construct() 
+    public function __construct()
     {
         $this->boxService = new BoxService();
     }
@@ -27,8 +27,21 @@ class ViewBoxByTokenAction extends AbstractAction
         if ($token === null) {
             throw new HttpNotFoundException($request, "Token de la box manquant.");
         }
+
         try {
             $boxData = $this->boxService->getBoxByToken($token);
+            $user = $_SESSION['user'] ?? null;
+
+            if ($user && isset($boxData['createur_id']) && $user['id'] === $boxData['createur_id'] && $boxData['statut'] === 1) {
+                $_SESSION['current_box'] = $boxData;
+            }
+
+            $total = 0;
+            if (isset($boxData['prestations'])) {
+                foreach ($boxData['prestations'] as $prestation) {
+                    $total += $prestation['tarif'] * $prestation['pivot']['quantite'];
+                }
+            }
 
             $isPrintMode = isset($request->getQueryParams()['print']);
 
@@ -37,7 +50,9 @@ class ViewBoxByTokenAction extends AbstractAction
                 'box' => $boxData,
                 'is_gift_mode' => (bool)$boxData['kdo'],
                 'is_print_mode' => $isPrintMode,
-                'user' => $_SESSION['user'] ?? null
+                'user' => $user,
+                'total' => $total,
+                'is_current_box_owner' => ($user && isset($boxData['createur_id']) && $user['id'] === $boxData['createur_id'])
             ]);
         } catch (BoxNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);

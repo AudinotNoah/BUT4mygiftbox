@@ -1,0 +1,10 @@
+Membres :
+
+Audinot Noah (GitHub : AudinotNoah)
+
+Mathys Blonbou (Github : zeryzez)
+
+Vivien Herrmann (Github : Vivienhrm)
+
+URL du dépôt Git public :
+https://github.com/AudinotNoah/BUT4mygiftbox

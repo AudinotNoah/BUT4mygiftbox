@@ -18,7 +18,7 @@ interface GestionBoxServiceInterface
 
     public function creerBoxDepuisType(string $userId, int $coffretTypeId, array $dataDonneesBox): array;
 
-    public function ajouterPrestationABox(string $boxId, string $prestationId, int $quantite): array;
+    public function ajouterPrestationABox(string $boxId, string $prestationId, int $quantite, string $userId): array;
 
     public function retirerPrestationDeBox(string $boxId, string $prestationId, string $userId): array;
 
@@ -26,6 +26,6 @@ interface GestionBoxServiceInterface
 
     public function afficherBoxEnCours(string $boxId, string $userId): array;
 
-    public function validerBox(string $boxId): array;
+    public function validerBox(string $boxId, string $userId): array;
 
 }

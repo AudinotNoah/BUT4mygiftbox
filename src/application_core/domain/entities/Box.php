@@ -27,6 +27,7 @@ class Box extends Model
         'kdo',
         'message_kdo',
         'statut',
+        'createur_id',
     ];
 
 

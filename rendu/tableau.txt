@@ -1,0 +1,26 @@
+Pour les premiers td, on avait chacun son propre repo, c'est pour ça que les premiers commits sont seulement fait par Noah.
+| N° | Fonctionnalité                                                 | Réalisée par                 | Statut |
+|----|----------------------------------------------------------------|------------------------------|--------|
+|  1 | Afficher la liste des prestations                              | Tous (Noah, Mathys, Vivien) | ✅     |
+|  2 | Afficher le détail d'une prestation                            | Tous (Noah, Mathys, Vivien) | ✅     |
+|  3 | Liste des prestations par catégories                           | Tous (Noah, Mathys, Vivien) | ✅     |
+|  4 | Liste des catégories                                            | Tous (Noah, Mathys, Vivien) | ✅     |
+|  5 | Affichage des coffrets types par thème                         | Tous (Noah, Mathys, Vivien) | ✅     |
+|  6 | Affichage d’un coffret type                                    | Tous (Noah, Mathys, Vivien) | ✅     |
+|  7 | Création d'une box vide                                        | Tous (Noah, Mathys, Vivien) | ✅     |
+|  8 | Création d’une box à partir d’un coffret type                  | Audinot Noah                 | ✅     |
+|  9 | Ajout de prestations dans la box                               | Tous (Noah, Mathys, Vivien) | ✅     |
+| 10 | Affichage d'une box                                            | Vivien Herrmann              | ✅     |
+| 11 | Validation d'une box                                           | Mathys Blonbou              | ✅     |
+| 12 | Génération de l'URL d'accès                                    | Vivien Herrmann              | ✅     |
+| 13 | Utilisation de l’URL pour accès au contenu                     | Vivien Herrmann              | ✅     |
+| 14 | Signin (connexion)                                             | Mathys Blonbou               | ✅     |
+| 15 | Register (inscription)                                         | Mathys Blonbou               | ✅     |
+| 16 | Accéder à ses box                                              | Audinot Noah, Mathys Blonbou                  | ✅     |
+| 17 | Suppression de prestations dans une box                        | Audinot Noah                 | ✅     |
+| 18 | Modification des quantités dans une box                        | Audinot Noah                 | ✅     |
+| 19 | Impression via l’URL                                           | Vivien Herrmann              | ✅     |
+| 20 | API : liste des prestations                                    | Audinot Noah                 | ✅     |
+| 21 | API : liste des catégories                                     | Audinot Noah                 | ✅     |
+| 22 | API : prestations d’une catégorie                              | Audinot Noah                 | ✅     |
+| 23 | API : contenu d’une box                                        | Audinot Noah                 | ✅     |

@@ -18,10 +18,15 @@ class AuthnService implements AuthnServiceInterface
             throw new \Exception("L'utilisateur avec l'ID fourni existe déjà.");
         }
 
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        if ($hashedPassword === false) {
+            throw new \RuntimeException("Échec du hachage du mot de passe.");
+        }
+
         $user = User::create([
             'id' => Uuid::uuid4()->toString(), 
             'user_id' => $userId,
-            'password' => $password,
+            'password' => $hashedPassword,
             'role' => '1'
         ]);
         
@@ -41,7 +46,7 @@ class AuthnService implements AuthnServiceInterface
         $user = User::where('user_id', $userId)->first();
 
         if (!$user) {
-            throw new UserNotFoundException("Utilisateur non trouvé avec l'ID fourni.");
+            throw new \RuntimeException("Utilisateur introuvable");
         }
         if (!password_verify($password, $user->password)) {
             throw new AuthnException("Mot de passe incorrect.");

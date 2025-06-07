@@ -11,6 +11,7 @@ use Slim\Routing\RouteContext;
 use gift\core\application\usecases\GestionBoxService;
 use gift\core\application\usecases\GestionBoxServiceInterface;
 use gift\core\domain\exceptions\BoxNotFoundException;
+use Slim\Exception\HttpUnauthorizedException;
 use gift\core\domain\exceptions\BoxAlreadyValidatedException;
 
 class AddPrestationToBoxAction extends AbstractAction
@@ -28,16 +29,25 @@ class AddPrestationToBoxAction extends AbstractAction
         $prestationId = $data['id'] ?? throw new HttpBadRequestException($request, "ID prestation manquant");
         $quantity = (int) ($data['quantity'] ?? 1);
 
-        $currentBox = $_SESSION['current_box']['id'] ?? null;
-        if (!$currentBox) {
-            throw new HttpBadRequestException($request, "Aucune box en session");
+        $user = $_SESSION['user'] ?? null;
+        if (!$user) {
+            throw new HttpUnauthorizedException($request, "Vous devez être connecté pour ajouter une prestation.");
         }
+        $userId = $user['id'];
+
+        $currentBox = $_SESSION['current_box'] ?? null;
+        if (!$currentBox) {
+            throw new HttpBadRequestException($request, "Aucune box en cours de création. Veuillez en créer une d'abord.");
+        }
+        $boxId = $currentBox['id'];
 
         try {
-            $boxArray = $this->gestionBoxService->ajouterPrestationABox($currentBox, $prestationId, $quantity);
+            $boxArray = $this->gestionBoxService->ajouterPrestationABox($boxId, $prestationId, $quantity, $userId);
+
+            $_SESSION['current_box'] = $boxArray;
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            $url = $routeParser->urlFor('view_current_box', ['token' => $boxArray['token'],'user' => $_SESSION['user'] ?? null]);
+            $url = $routeParser->urlFor('view_current_box');
 
             return $response
                 ->withHeader('Location', $url)
@@ -54,8 +64,10 @@ class AddPrestationToBoxAction extends AbstractAction
             ]);
 
             return $response->withHeader('Location', $url)->withStatus(302);
-        } catch (BoxNotFoundException $e) {
+        } catch (BoxNotFoundException | PrestationNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);
-        }   
+        } catch (\Exception $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        }
     }
 }

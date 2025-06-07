@@ -11,29 +11,31 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>MyGiftBox.net</h1>
-    </header>
 
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('home') }}">Accueil</a></li>
-            <li><a href="{{ url_for('liste_categories') }}">Catégories</a></li>
-            <li><a href="{{ url_for('liste_prestations') }}">Toutes les Prestations</a></li>
-            <li><a href="{{ url_for('liste_coffrets_par_theme') }}">Nos Coffrets</a></li>
-            <li><a href="{{ url_for('create_box') }}">Crée une nouvelle Box</a></li> 
-            <li><a href="{{ url_for('view_current_box') }}">Ma Box</a></li>
-            {% if user is not null %}
-                <li>
-                    <a href="{{ url_for('logout') }}">deconnexion</a>
-                </li>
-            {% else %}
-                <li><a href="{{ url_for('signin_get') }}">Connexion</a></li>
-                <li><a href="{{ url_for('register_get') }}">Register</a></li>
-            {% endif %}
-    </nav>
+    {% if not is_print_mode %}
+        <header>
+            <h1>MyGiftBox.net</h1>
+        </header>
 
-    <hr>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Accueil</a></li>
+                <li><a href="{{ url_for('liste_categories') }}">Catégories</a></li>
+                <li><a href="{{ url_for('liste_prestations') }}">Toutes les Prestations</a></li>
+                <li><a href="{{ url_for('liste_coffrets_par_theme') }}">Nos Coffrets</a></li>
+                <li><a href="{{ url_for('create_box') }}">Crée une nouvelle Box</a></li> 
+                <li><a href="{{ url_for('view_current_box') }}">Ma Box</a></li>
+                <li><a href="{{ url_for('user_boxes') }}">Mes Box</a></li>
+                {% if user is not none %}
+                    <li><a href="{{ url_for('logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('signin_get') }}">Connexion</a></li>
+                    <li><a href="{{ url_for('register_get') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <hr>
+    {% endif %}
 
     <main>
         {% block content %}
@@ -41,10 +43,12 @@
         {% endblock %}
     </main>
 
-    <hr>
+    {% if not is_print_mode %}
+        <hr>
+        <footer>
+            <p>© 2025 MyGiftBox.net</p>
+        </footer>
+    {% endif %}
 
-    <footer>
-        <p>© 2025 MyGiftBox.net</p>
-    </footer>
 </body>
 </html>

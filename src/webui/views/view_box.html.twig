@@ -2,33 +2,58 @@
 
 {% block title %}Votre Coffret : {{ box.libelle }}{% endblock %}
 
-{% block content %}    
-
+{% block content %}
+    {# 1. Informations générales de la box #}
     <h1>{{ box.libelle }}</h1>
-
     {% if box.description %}
         <p>{{ box.description|nl2br }}</p>
     {% endif %}
 
-    {% if box.kdo and box.message_kdo %} 
+    {% if box.kdo and box.message_kdo %}
         <div style="border: 1px solid #ccc; padding: 10px; margin: 15px 0; background-color: #f9f9f9;">
             <h3>Message pour vous :</h3>
             <p><em>{{ box.message_kdo|nl2br }}</em></p>
         </div>
     {% endif %}
 
+    <hr>
+
     <h3>Prestations incluses :</h3>
-    {% if box.prestations is empty and box.statut == 1 %}
-        <p>Aucune prestation dans ce coffret.</p>
+    {% if box.prestations is empty %}
+        <p>Votre box est vide.
+            {% if is_current_box_owner and box.statut == 1 and not is_print_mode %}
+                <a href="{{ url_for('liste_prestations') }}">Parcourez le catalogue</a> pour commencer !
+            {% endif %}
+        </p>
     {% else %}
         <ul>
             {% for presta_pivot in box.prestations %}
                 <li>
-                    <strong>{{ presta_pivot.libelle }}</strong> (Quantité : {{ presta_pivot.pivot.quantite }})
+                    <strong>{{ presta_pivot.libelle }}</strong>
                     <br>
-                    {{ presta_pivot.description|nl2br }}
-                    {% if not box.kdo %} 
+                    <span>Description : {{ presta_pivot.description|nl2br }}</span>
+
+                    {% if is_current_box_owner and box.statut == 1 and not is_print_mode %}
                         <br><span>Tarif unitaire : {{ presta_pivot.tarif }} €</span>
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <form action="{{ url_for('update_prestation_quantity') }}" method="POST" style="margin: 0;">
+                                <input type="hidden" name="presta_id" value="{{ presta_pivot.id }}">
+                                <label>
+                                    Quantité :
+                                    <input type="number" name="quantity" value="{{ presta_pivot.pivot.quantite }}" min="0" style="width: 60px;">
+                                </label>
+                                <button type="submit">Mettre à jour</button>
+                            </form>
+                            <form action="{{ url_for('remove_prestation_from_box') }}" method="POST" style="margin: 0;">
+                                <input type="hidden" name="presta_id" value="{{ presta_pivot.id }}">
+                                <button type="submit" style="background-color: #e74c3c; color: white;">Supprimer</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <br><span>Quantité : {{ presta_pivot.pivot.quantite }}</span>
+                        {% if not box.kdo %}
+                           <br><span>Tarif unitaire : {{ presta_pivot.tarif }} €</span>
+                        {% endif %}
                     {% endif %}
                 </li>
             {% endfor %}
@@ -40,25 +65,41 @@
             <strong>{{ msg }}</strong>
         </div>
     {% endfor %}
-
+    
     <p style="margin-top: 30px;">
         <a href="{{ url_for('liste_categories') }}">Voir le catalogue</a> {# Lien ajouté ici #}
     </p>
 
-    {% if not box.kdo %} 
-        <hr>
-        <h3>Montant total de la box : {{ total }} €</h3>
+    <hr>
+
+    {% if not box.kdo or (is_current_box_owner and box.statut == 1) %}
+        <h3>Montant total de la box : {{ total|number_format(2, ',', ' ') }} €</h3>
     {% endif %}
 
-    {% if not box.kdo and box.prestations|length >= 2 and box.statut == 1 %}
-        <form action="{{ url_for('validate_box') }}" method="POST">
-            <button type="submit" class="btn btn-primary">Valider la box</button>
-        </form>
+    {% if not is_print_mode %}
+        {% if is_current_box_owner and box.statut == 1 and box.prestations|length >= 2 %}
+            <form action="{{ url_for('validate_box') }}" method="POST">
+                <button type="submit" class="btn btn-primary">Valider la box</button>
+            </form>
+        {% endif %}
+
+        {% if box.statut == 2 %}
+            <p style="color: green; font-weight: bold;">Cette box a été validée et ne peut plus être modifiée.</p>
+
+            {% if is_current_box_owner %}
+                <div style="margin-top: 20px; padding: 15px; border: 2px dashed #27ae60; background-color: #e9f7ef;">
+                    <h4>Partagez ou Imprimez votre coffret !</h4>
+                    <p>Votre coffret est prêt ! Partagez ce lien avec le destinataire ou utilisez-le pour consulter le coffret à tout moment.</p>
+                    <p><strong>Lien de partage :</strong></p>
+                    <input type="text" value="{{ share_url }}" readonly style="width: 100%; padding: 8px;">
+                    <a href="{{ url_for('view_box_by_token', {'token': box.token}, {'print': 'true'}) }}" target="_blank">
+                        <button style="margin-top: 10px;">Version Imprimable</button>
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <p style="margin-top: 30px;"><a href="{{ url_for('home') }}">Retour à l'accueil</a></p>
     {% endif %}
 
-    {% if box.statut == 2 %}
-        <p class="alert alert-info">Cette box a été validée et ne peut plus être modifiée.</p>
-    {% endif %}
-
-    <p style="margin-top: 30px;"><a href="{{ url_for('home') }}">Retour à l'accueil</a></p>
 {% endblock %}

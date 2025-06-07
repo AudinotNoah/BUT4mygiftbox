@@ -38,7 +38,7 @@ class RegisterAction extends AbstractAction
                 throw new \Exception("Adresse e-mail invalide.");
             }
 
-            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            // $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
 
             try {
                 CsrfTokenProvider::check($data['csrf'] ?? '');

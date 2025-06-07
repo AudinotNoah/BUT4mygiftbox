@@ -1,0 +1,43 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Mes Box{% endblock %}
+
+{% block content %}
+    <h2>Mes Box</h2>
+
+    {% if boxes is empty %}
+        <p>Vous n'avez créé aucune box pour le moment.</p>
+        <a href="{{ url_for('create_box') }}">Créer une nouvelle box</a>
+    {% else %}
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="padding: 8px;">Libellé</th>
+                    <th style="padding: 8px;">Date de création</th>
+                    <th style="padding: 8px;">Statut</th>
+                    <th style="padding: 8px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for box in boxes %}
+                    <tr>
+                        <td style="padding: 8px;">{{ box.libelle }}</td>
+                        <td style="padding: 8px;">{{ box.created_at|date('d/m/Y H:i') }}</td>
+                        <td style="padding: 8px;">
+                            {% if box.statut == 1 %}
+                                En cours de création
+                            {% elseif box.statut == 2 %}
+                                Validée
+                            {% else %}
+                                Inconnu
+                            {% endif %}
+                        </td>
+                        <td style="padding: 8px;">
+                            <a href="{{ url_for('view_box_by_token', {'token': box.token}) }}">Voir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

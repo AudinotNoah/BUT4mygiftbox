@@ -46,7 +46,7 @@ class AuthnService implements AuthnServiceInterface
         $user = User::where('user_id', $userId)->first();
 
         if (!$user) {
-            throw new UserNotFoundException("Utilisateur non trouvé avec l'ID fourni.");
+            throw new \RuntimeException("Utilisateur introuvable");
         }
         if (!password_verify($password, $user->password)) {
             throw new AuthnException("Mot de passe incorrect.");

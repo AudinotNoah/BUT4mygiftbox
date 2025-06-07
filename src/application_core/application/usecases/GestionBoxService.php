@@ -131,9 +131,6 @@ class GestionBoxService implements GestionBoxServiceInterface
 
         $result = $box->prestations()->updateExistingPivot($prestationId, ['quantite' => $nouvelleQuantite]);
         
-        if ($result === 0) {
-            throw new PrestationNotFoundException("Cette prestation n'était pas dans la box.");
-        }
 
         $box->load('prestations');
         return $box->toArray();

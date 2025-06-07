@@ -18,16 +18,38 @@
 
     <h3>Prestations incluses :</h3>
     {% if box.prestations is empty and box.statut == 1 %}
-        <p>Aucune prestation dans ce coffret.</p>
+        <p>Votre box est vide. <a href="{{ url_for('liste_prestations') }}">Parcourez le catalogue</a> pour ajouter des prestations !</p>
     {% else %}
         <ul>
             {% for presta_pivot in box.prestations %}
                 <li>
-                    <strong>{{ presta_pivot.libelle }}</strong> (Quantité : {{ presta_pivot.pivot.quantite }})
+                    <strong>{{ presta_pivot.libelle }}</strong>
                     <br>
-                    {{ presta_pivot.description|nl2br }}
-                    {% if not box.kdo %} 
+                    <span>Description : {{ presta_pivot.description|nl2br }}</span>
+
+                    {% if not box.kdo and box.statut == 1 %}
                         <br><span>Tarif unitaire : {{ presta_pivot.tarif }} €</span>
+
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <form action="{{ url_for('update_prestation_quantity') }}" method="POST" style="margin: 0;">
+                                <input type="hidden" name="presta_id" value="{{ presta_pivot.id }}">
+                                <label>
+                                    Quantité :
+                                    <input type="number" name="quantity" value="{{ presta_pivot.pivot.quantite }}" min="0" style="width: 60px;">
+                                </label>
+                                <button type="submit">Mettre à jour</button>
+                            </form>
+
+                            <form action="{{ url_for('remove_prestation_from_box') }}" method="POST" style="margin: 0;">
+                                <input type="hidden" name="presta_id" value="{{ presta_pivot.id }}">
+                                <button type="submit" style="background-color: #e74c3c; color: white;">Supprimer</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <br><span>Quantité : {{ presta_pivot.pivot.quantite }}</span>
+                        {% if not box.kdo %}
+                            <br><span>Tarif unitaire : {{ presta_pivot.tarif }} €</span>
+                        {% endif %}
                     {% endif %}
                 </li>
             {% endfor %}
@@ -35,7 +57,7 @@
     {% endif %}
 
     <p style="margin-top: 30px;">
-        <a href="{{ url_for('liste_categories') }}">Voir le catalogue</a> {# Lien ajouté ici #}
+        <a href="{{ url_for('liste_categories') }}">Voir le catalogue</a>
     </p>
 
     {% if not box.kdo %} 

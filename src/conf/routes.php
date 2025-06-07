@@ -22,6 +22,8 @@ use gift\webui\actions\GetSignInFormAction;
 use gift\webui\actions\GetRegisterFormAction;
 use gift\webui\actions\RegisterAction;
 use gift\webui\actions\LogoutAction;
+use gift\webui\actions\ModifyPrestationQuantityAction;
+use gift\webui\actions\RemovePrestationFromBoxAction;
 
 return function (App $app): App {
 
@@ -84,6 +86,12 @@ return function (App $app): App {
 
     $app->get('/logout', LogoutAction::class)
         ->setName('logout');
+
+    $app->post('/box/prestation/remove', RemovePrestationFromBoxAction::class)
+        ->setName('remove_prestation_from_box');
+
+    $app->post('/box/prestation/update', ModifyPrestationQuantityAction::class)
+        ->setName('update_prestation_quantity');
 
     return $app;
 };

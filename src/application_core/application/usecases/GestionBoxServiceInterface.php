@@ -26,6 +26,6 @@ interface GestionBoxServiceInterface
 
     public function afficherBoxEnCours(string $boxId, string $userId): array;
 
-    public function validerBox(string $boxId): array;
+    public function validerBox(string $boxId, string $userId): array;
 
 }

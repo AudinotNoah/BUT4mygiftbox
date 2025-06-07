@@ -32,8 +32,12 @@ class GetFormBoxAction extends AbstractAction
             }catch (\Exception $e) {
                 throw new HttpNotFoundException($request, "Token CSRF invalide : " . $e->getMessage(), $e);
             }
+            $user = $_SESSION['user'] ?? null;
+            if (!$user) {
+                throw new HttpUnauthorizedException($request, "Vous devez être connecté pour créer une box.");
+            }
+            $userId = $user['id'];
 
-            $userId = $request->getAttribute('user_id');
 
             $verifLib = filter_var($newBoxData['libelle'], FILTER_SANITIZE_SPECIAL_CHARS);
             $verifDesc = filter_var($newBoxData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -55,7 +59,7 @@ class GetFormBoxAction extends AbstractAction
                 'csrf' => $csrfToken,
                 
             ];
-            $box = $gestionBoxService->creerBoxVide('test', $boxData);
+            $box = $gestionBoxService->creerBoxVide($userId, $boxData); 
 
             $_SESSION['current_box'] = $box;
 

@@ -120,31 +120,32 @@ class GestionBoxService implements GestionBoxServiceInterface
         return $box->toArray();
     }
 
-    function validerBox(string $boxId): array
+    public function validerBox(string $boxId, string $userId): array
     {
         $box = Box::with('prestations')->find($boxId);
         if (!$box) {
             throw new BoxNotFoundException("Box avec l'id $boxId non trouvée.");
         }
 
-        // Vérifier le nombre de prestations
+        
+        if ($box->createur_id !== $userId) {
+            throw new OperationNotPermittedException("Vous n'êtes pas autorisé à valider cette box.");
+        }
+
         if ($box->prestations()->count() < 2) {
             throw new ValidationException("La box doit contenir au moins 2 prestations");
         }
 
-        // Vérifier que la box n'est pas déjà validée
         if ($box->statut !== 1) {
-            throw new ValidationException("La box n'est pas en état d'être validée");
+            throw new ValidationException("Cette box a déjà été validée ou est dans un état incorrect.");
         }
 
-        // Calculer le montant total
         $montantTotal = 0;
         foreach ($box->prestations as $prestation) {
             $montantTotal += $prestation->tarif * $prestation->pivot->quantite;
         }
 
-        // Valider la box
-        $box->statut = 2; // 2 = validée
+        $box->statut = 2;
         $box->montant = $montantTotal;
         $box->save();
 

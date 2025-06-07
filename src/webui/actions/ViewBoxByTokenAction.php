@@ -11,6 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 use gift\core\application\usecases\BoxServiceInterface;
 use gift\core\application\usecases\BoxService;
 use gift\core\domain\exceptions\BoxNotFoundException;
+use Slim\Routing\RouteContext;
 
 class ViewBoxByTokenAction extends AbstractAction
 {
